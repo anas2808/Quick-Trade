@@ -1,0 +1,66 @@
+{% extends 'user/base.html' %}
+
+
+{% block style %}
+    
+{% endblock style %}
+    
+{% include 'messages.html' %}
+{% block content %}
+ <!-- Main Content -->
+    <main>
+        <div class="container py-5">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Update Your Product</li>
+                </ol>
+            </nav>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="form-card">
+                        <h2 class="mb-4">Update your Item for Sale</h2>
+                        
+                        <form id="sellForm" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            
+                            <!-- Submit Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-tag me-2"></i>Update Listing
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+   
+    {% endblock content %} 
+    {% block script %}
+    <!-- Form validation and image preview -->
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+
+        
+       {% endblock script %}

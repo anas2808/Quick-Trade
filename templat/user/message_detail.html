@@ -1,0 +1,127 @@
+{% extends 'user/base.html' %}
+
+{% load status_colors %}
+{% block style %}
+    
+{% endblock style %}
+{% include 'messages.html' %}
+{% block content %}
+
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">My Profile</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'message_list' %}">Messages</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Message Detail</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Actions</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'message_list' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Messages
+                    </a>
+                    {% if message.sender != user %}
+                    <a href="{% url 'send_message' receiver_id=message.sender %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-reply me-2"></i>Reply
+                    </a>
+                    {% endif %}
+                    {% if message.product %}
+                    <a href="{% url 'product_detail' product_id=message.product.id %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-tag me-2"></i>View Product
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ message.subject }}</h5>
+                    <span class="badge {% if message.is_read %}bg-success{% else %}bg-primary{% endif %}">
+                        {% if message.is_read %}Read{% else %}Unread{% endif %}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="message-meta mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1">
+                                    <strong>From:</strong> {{ message.sender.username }}
+                                </p>
+                                <p class="mb-1">
+                                    <strong>To:</strong> {{ message.receiver.username }}
+                                </p>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <p class="mb-1">
+                                    <strong>Date:</strong> {{ message.created_at|date:"F d, Y" }}
+                                </p>
+                                <p class="mb-1">
+                                    <strong>Time:</strong> {{ message.created_at|time:"g:i A" }}
+                                </p>
+                            </div>
+                        </div>
+                        {% if message.product %}
+                        <div class="product-reference mt-3 p-3 bg-light rounded">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <img src="{{ message.product.image.url }}" alt="{{ message.product.name }}" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Product: {{ message.product.name }}</h6>
+                                    <p class="mb-0 small">${{ message.product.price }} - {{ message.product.condition }}</p>
+                                </div>
+                                <div class="ms-auto">
+                                    <a href="{% url 'product_detail' product_id=message.product.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="message-content">
+                        <p class="whitespace-pre-wrap">{{ message.content }}</p>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'message_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Messages
+                        </a>
+                        {% if message.sender != user %}
+                        <a href="{% url 'send_message' receiver_id=message.sender %}" class="btn btn-primary">
+                            <i class="fas fa-reply me-2"></i>Reply
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %} 
+
+{% block script %}
+
+<style>
+    .whitespace-pre-wrap {
+        white-space: pre-wrap;
+    }
+</style>
+
+{% endblock script %}

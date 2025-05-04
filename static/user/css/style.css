@@ -1,0 +1,174 @@
+/* Custom CSS for QuickTrade */
+
+body {
+    font-family: 'Nunito', sans-serif;
+    padding-top: 70px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(#a1e4369c, #a1e4369d), url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&q=80&w=1080');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    margin-top: -20px;
+}
+
+/* Product Cards */
+.product-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-card .price {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #343a40;
+}
+
+.product-card .location {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.product-card .date {
+    font-size: 0.8rem;
+}
+
+/* Category Cards */
+.category-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 10px;
+    border: none;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+}
+
+/* Product Detail */
+.product-image {
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.seller-info {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* Forms */
+.form-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.form-card {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Django Form Field Styling */
+textarea, 
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="number"], 
+input[type="search"], 
+select {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+textarea:focus, 
+input[type="text"]:focus, 
+input[type="email"]:focus, 
+input[type="password"]:focus, 
+input[type="number"]:focus, 
+input[type="search"]:focus,
+select:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Price display */
+.product-price {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #212529;
+}
+
+/* Search Form */
+.navbar-search {
+    max-width: 400px;
+}
+
+@media (max-width: 768px) {
+    .navbar-search {
+        margin: 10px 0;
+    }
+}
+
+/* Footer */
+.footer {
+    background-color: #f8f9fa;
+    padding: 30px 0;
+    margin-top: auto;
+}
+
+.footer a {
+    color: #6c757d;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: #007bff;
+}
+
+.social-icons a {
+    font-size: 18px;
+    color: #6c757d;
+}
+
+.social-icons a:hover {
+    color: rgba(0, 255, 76, 0.9);
+}

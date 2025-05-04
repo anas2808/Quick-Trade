@@ -1,0 +1,17 @@
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} fade show" id="msg" role="alert">
+   {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<script>
+  setTimeout(function(){
+    if ($('#msg').length >0){
+      $('#msg').remove();
+    }
+  },3000);
+</script>
+{% endfor %}
+{% endif %}

@@ -1,0 +1,62 @@
+{% extends 'user/base.html' %}
+
+
+{% block style %}
+    
+{% endblock style %}
+    
+
+{% block content %}
+        <!-- Main Content -->
+    <main>
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-card auth-form">
+                        <h2 class="text-center mb-4">Login to Your Account</h2>
+                        
+                        <form id="loginForm" method="POST" action="{% url 'login' %}">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                                <a href="#" class="float-end">Forgot password?</a>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="mt-4 text-center">
+                            <p>Don't have an account? <a href="{% url 'register' %}">Sign up now</a></p>
+                        </div>
+                        
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% endblock content %} 
+    {% block script %}
+    <style>
+        .social-login-divider {
+            position: relative;
+            text-align: center;
+        }
+    
+        .social-login-divider-text {
+            display: inline-block;
+            padding: 0 10px;
+            background: white;
+            position: relative;
+            top: -12px;
+            color: #6c757d;
+        }
+        </style>
+    {% endblock script %}

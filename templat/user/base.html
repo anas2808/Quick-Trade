@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Trade - Buy and Sell Marketplace</title>
+     
+    {% load static %}
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Fonts - Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'user/bootstrap.min.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
+    {% block style %}
+        
+    {% endblock style %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container">
+            <a class="navbar-brand text-primary" href="{% url 'index' %}">
+                <i class="fas fa-bolt me-2"></i>Quick Trade
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <form class="d-flex mx-auto navbar-search search-form" action="{% url 'product_list' %}" method="GET">
+                    <div class="input-group">
+                        <input class="form-control" type="search" name="search" placeholder="Search products..." aria-label="Search">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="d-flex align-items-center ms-lg-3">
+                    <!-- Location Dropdown
+                    <div class="dropdown me-3">
+                        <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" type="button" id="locationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-map-marker-alt me-2"></i>Location
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="locationDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-globe-americas me-2"></i>Anywhere</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-location-arrow me-2"></i>Near Me</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-city me-2"></i>New York</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-city me-2"></i>Los Angeles</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-city me-2"></i>Chicago</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-city me-2"></i>Houston</a></li>
+                        </ul>
+                    </div>
+                     -->
+                    <!-- User is not logged in (default state) -->
+                    {% if user.is_authenticated %}
+                    <!-- User is logged in -->
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-2"></i>{{ user.username }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user me-2"></i>My Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'message_list' %}"><i class="fas fa-envelope me-2"></i>Messages</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                    <a href="{% url 'sell' %}" class="btn btn-primary ms-2">
+                        <i class="fas fa-plus-circle me-2"></i>Sell
+                    </a>
+                    {% else %}
+                    <!-- User is not logged in -->
+                    <a href="{% url 'login' %}" class="btn btn-light me-2">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                    <a href="{% url 'sell' %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-2"></i>Sell
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- End of Navigation -->
+     {% block content %}
+        
+
+
+     {% endblock content %}
+      <!-- CTA Section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="mb-4">Ready to Start Buying and Selling?</h2>
+            <p class="lead mb-4">Join our community of buyers and sellers today!</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                {% if user.is_authenticated %}
+                <a href="{% url 'sell' %}" class="btn btn-light btn-lg px-4 gap-3">
+                    <i class="fas fa-user-plus me-2"></i>Start Selling
+                </a>
+                <a href="{% url 'product_list' %}" class="btn btn-outline-light btn-lg px-4">
+                    <i class="fas fa-shopping-cart me-2"></i>Start Shopping
+                </a>
+                {% else %}
+                <a href="{% url 'register' %}" class="btn btn-light btn-lg px-4 gap-3">
+                    <i class="fas fa-user-plus me-2"></i>Sign Up Now
+                </a>
+                <a href="{% url 'product_list' %}" class="btn btn-outline-light btn-lg px-4">
+                    <i class="fas fa-shopping-cart me-2"></i>Start Shopping
+                </a>
+                {% endif %}
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="text-primary"><i class="fas fa-bolt me-2"></i>Quick Trade</h5>
+                    <p class="text-muted">
+                        The easiest way to buy and sell locally. Join millions of users and start trading today!
+                    </p>
+                    <div class="social-icons">
+                        <a href="#" class="me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6 mb-4 mb-md-0">
+                    <h6 class="text-dark">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="mb-2"><a href="{% url 'product_list' %}">Browse</a></li>
+                        <li class="mb-2"><a href="{% url 'sell' %}">Sell</a></li>
+                        <!-- <li class="mb-2"><a href="#">About Us</a></li> -->
+                    </ul>
+                </div>
+                <div class="col-md-2 col-6 mb-4 mb-md-0">
+                    <h6 class="text-dark">Categories</h6>
+                    <ul class="list-unstyled">
+                        {% for categ in categories %}
+                          
+                        <li class="mb-2"><a href="{% url 'product_list' %}?category={{ categ.id }}">{{ categ.categories_name}}</a></li>
+                        {% endfor %}
+                        
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="text-dark">Contact Us</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>123 Trade Street, Market City</li>
+                        <li class="mb-2"><i class="fas fa-phone-alt me-2"></i>(123) 456-7890</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i>info@quicktrade.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="small text-muted mb-0">&copy; 2024 Quick Trade. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="small text-muted mb-0">
+                        <a href="#">Privacy Policy</a> | 
+                        <a href="#">Terms of Service</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{% static 'user/js/script.js' %}"></script>
+    {% block script %}
+        
+    {% endblock script %}
+</body>
+</html>

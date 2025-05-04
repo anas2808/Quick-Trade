@@ -1,0 +1,136 @@
+{% extends 'admin/base.html' %}
+{%  load static %}
+{% block style %}
+ <!-- plugins:css -->
+ <link rel="stylesheet" href="{% static 'admin/vendors/feather/feather.css' %}">
+ <link rel="stylesheet" href="{% static 'admin/vendors/ti-icons/css/themify-icons.css' %}">
+ <link rel="stylesheet" href="{% static 'admin/vendors/css/vendor.bundle.base.css' %}">
+ <link rel="stylesheet" href="{% static 'admin/vendors/font-awesome/css/font-awesome.min.css' %}">
+ <!-- endinject -->
+  
+{% endblock style %}
+
+{% include 'messages.html' %}
+
+{% block content %}
+
+<div class="main-panel">        
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Category Table</h4>
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>
+                          User ID
+                        </th>
+                        <th>
+                         Username
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            First Name
+                        </th>
+                        <th>
+                            Last Name                            
+                        </th>
+                        <th>
+                            Phone
+                        </th>
+                        <th>
+                            Bio
+                        </th>
+                        <th>
+                            Profile Picture
+                        </th>
+                        <th>
+                            Date of Registration
+                        </th>
+                        <th>
+                            Date of Last Login
+                        </th>
+                        <th>
+                            User Status
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in user %}
+                          
+                        <tr>
+                        <td>
+                          {{ i.user_id }}
+                        </td>
+                        <td>
+                            {{ i.username }}
+                        </td>
+                        <td>
+                            {{ i.email }}
+                        </td>
+                        <td>
+                            {{ i.first_name }}
+                        </td>
+                        <td>
+                            {{ i.last_name }}
+                        </td>
+                        <td>
+                            {{ i.phone }}
+                        </td>
+                        <td>
+                            {{ i.bio }}                            
+                        </td>
+                        <td class="py-1">
+                          <img src="/media/{{ i.profile_picture }}"
+                                                width="50" height="50"></td>
+                        </td>                
+                        <td>
+                            {{ i.registration_date }}
+                        </td>
+                        <td>
+                            {{ i.last_login }}
+                        </td>
+                        <td>
+                            {% if i.is_active == 1 %}
+                            <span class="badge badge-success">Active</span>
+                            {% else %}
+                            <span class="badge badge-danger">Inactive</span>
+                            {% endif %}
+                        </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+   
+    <!-- content-wrapper ends -->
+  </div>
+{% endblock content %}
+
+
+{% block script %}
+
+ <!-- container-scroller -->
+ <!-- plugins:js -->
+ <script src="{% static 'admin/vendors/js/vendor.bundle.base.js' %}"></script>
+ <!-- endinject -->
+   <!-- inject:js -->
+    <script src="{% static 'admin/js/alerts.js' %}"></script>
+  <!-- Plugin js for this page-->
+  <script src="{% static 'admin/vendors/sweetalert/sweetalert.min.js' %}"></script>
+  <script src="{% static 'admin/vendors/jquery.avgrund/jquery.avgrund.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+ 
+  
+  {% endblock script %}
+  

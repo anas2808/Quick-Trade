@@ -1,0 +1,119 @@
+{% extends 'user/base.html' %}
+
+{% load status_colors %}
+{% block style %}
+    
+{% endblock style %}
+
+{% include 'messages.html' %}
+
+{% block content %}
+  <!-- Main Content -->
+  <main>
+    <div class="container py-5">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Profile</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <!-- Profile Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="avatar-container mb-3">
+                            <div class="avatar-placeholder rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px;">
+                                <td><img class="rounded-circle" src="/media/{{ user.profile_picture }}" width="100" height="100"></td>
+                            </div>
+                        </div>
+                        <h4>{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</h4>
+                        <p class="text-muted">{{ user.email }}</p>
+                         
+                        <div class="d-grid gap-2 mt-3">
+                            <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary">
+                                <i class="far fa-envelope me-2"></i>Edit Profile
+                                
+                            </a>
+                        </div>
+                        <div class="d-grid gap-2 mt-3">
+                            <a href="{% url 'message_list' %}" class="btn btn-outline-primary">
+                                <i class="far fa-envelope me-2"></i>Messages
+                                {% if unread_count > 0 %}
+                                <span class="badge bg-danger ms-2">{{ unread_count }}</span>
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            My Listings
+                            <span class="badge bg-primary rounded-pill">{{product|length}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">My Listings</h5>
+                        <a href="{% url 'sell' %}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus me-1"></i>Add New Listing
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                           <!--  Product  -->
+                  {% for prod in product %}
+                     
+                  <div class="col-md-6 col-lg-4 col-xl-3">
+                      <div class="card product-card h-100">
+                          <img src="{{ prod.image.url }}" class="card-img-top object-fit-md-contain" alt="{{ prod.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ prod.name }}</h5>
+                            <p class="price mb-1">₹{{ prod.price }}</p>
+                            <p class="location mb-2 d-flex align-items-center">
+                                <i class="fas fa-map-marker-alt me-1"></i> {{ prod.location }}
+                            </p>
+                            <p class="text-muted large mb-2">
+                                <span class="badge large bg-{{ prod.ad_status|get_status }}" >{{ prod.ad_status }}</span>
+                              </p>
+                            <p class="text-muted large mb-0">
+                                <span class="badge  bg-success">{{ prod.condition }}</span>
+                                <span class="float-end date">
+                                    <i class="far fa-clock me-1"></i> {{ prod.created_at|date:"M d" }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white p-3 border-top-0">
+                            <a href="{% url 'product_detail' prod.id %}" class="btn btn-primary d-block">View Details</a>
+                        </div>
+                        <div class="card-footer bg-white p-3 border-top-0">
+                            <a href="{% url 'update_product' prod.id %}" class="btn btn-primary d-block">Update Listing</a>
+                        </div>
+                        <div class="card-footer bg-white p-3 border-top-0">
+                            <a href="{% url 'delete_listing' prod.id %}" class="btn btn-primary d-block">Delete Listing</a>
+                        </div>
+                    </div>
+                </div>
+                
+                {% endfor %}
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %} 
+
+{% block script %}
+
+
+{% endblock script %}
