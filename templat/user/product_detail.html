@@ -1,0 +1,125 @@
+{% extends 'user/base.html' %}
+
+
+{% block style %}
+    
+{% endblock style %}
+    
+{% include 'messages.html' %}
+{% block content %}
+    
+<main>
+    {% for prod in prod  %}
+    <div class="container py-5">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'product_list' %}">Products</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'product_list' %}?category={{prod.main_category.id}}">{{ prod.main_category }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ prod.name }}</li>
+            </ol>
+        </nav>
+        
+        <!-- Product Detail -->
+        <div class="row">
+            <!-- Product Image -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="product-image-container bg-white p-3 rounded shadow-sm">
+                    <img src="{{ prod.image.url }}" alt="{{ prod.name }}" class="product-image img-fluid object-fit-md-contain">
+                    
+                    <div class="d-flex justify-content-center mt-3">
+                        <a href="#" class="btn btn-outline-primary mx-1" data-bs-toggle="tooltip" title="Add to Favorites">
+                            <i class="far fa-heart"></i>
+                        </a>
+                        <!-- <a href="#" class="btn btn-outline-primary mx-1" data-bs-toggle="tooltip" title="Share">
+                            <i class="fas fa-share-alt"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary mx-1" data-bs-toggle="tooltip" title="Report">
+                            <i class="far fa-flag"></i> -->
+                        </a>
+                    </div>
+                </div>
+            </div>
+              
+            <!-- Product Info -->
+            <div class="col-lg-6">
+                <div class="card form-card h-100">
+                    <div class="card-body">
+                        <h1 class="h2 mb-2">{{ prod.name }}</h1>
+                        <p class="product-price mb-3">₹{{ prod.price }}</p>
+                        
+                        <div class="product-meta mb-4">
+                            <span class="badge rounded-pill bg-success mb-2 me-2">{{ prod.condition }}</span>
+                            <span class="d-block mb-2"><i class="fas fa-map-marker-alt me-2"></i>{{ prod.location }}</span>
+                            <span class="d-block mb-2"><i class="far fa-clock me-2"></i>Listed on {{ prod.created_at|date:"M d" }}</span>
+                            <span class="d-block"><i class="fas fa-user me-2"></i>Posted by {{ prod.seller.first_name }}</span>
+                        </div>
+                        
+                        <h5>Description</h5>
+                        <div class="product-description mb-4">
+                            {{ prod.description }}
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="d-grid gap-2">
+                            {% if user.is_authenticated and user != prod.seller %}
+                            <a href="{% url 'send_message_product' receiver_id=prod.seller product_id=prod.id %}" class="btn btn-primary btn-lg">
+                                <i class="far fa-comment-dots me-2"></i>Contact Seller
+                            </a>
+                            {% elif user.is_authenticated and user == prod.seller %}
+                            <button class="btn btn-secondary btn-lg" disabled>
+                                <i class="far fa-comment-dots me-2"></i>Your Listing
+                            </button>
+                            {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+                                <i class="far fa-comment-dots me-2"></i>Login to Contact Seller
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'user_listing' username=prod.seller.username %}" class="btn btn-outline-primary">
+                                <i class="fas fa-user me-2"></i>View Seller's Other Listings
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        
+        <!-- Safety Tips -->
+        <div class="card bg-light mt-5">
+            <div class="card-body">
+                <h5 class="mb-3"><i class="fas fa-shield-alt me-2 text-primary"></i>Safety Tips for Buyers</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="d-flex mb-2">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Meet in a public, well-lit place</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex mb-2">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Inspect the item before paying</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex mb-2">
+                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                            <span>Never send money before receiving an item</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+   
+{% endblock content %} 
+   {% block script %}
+    
+   {% endblock script %}

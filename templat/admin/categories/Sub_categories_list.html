@@ -1,0 +1,143 @@
+{% extends 'admin/base.html' %}
+{%  load static %}
+{% block style %}
+ <!-- plugins:css -->
+ <link rel="stylesheet" href="{% static 'admin/vendors/feather/feather.css' %}">
+ <link rel="stylesheet" href="{% static 'admin/vendors/ti-icons/css/themify-icons.css' %}">
+ <link rel="stylesheet" href="{% static 'admin/vendors/css/vendor.bundle.base.css' %}">
+ <link rel="stylesheet" href="{% static 'admin/vendors/font-awesome/css/font-awesome.min.css' %}">
+ <!-- endinject -->
+  
+{% endblock style %}
+
+
+
+{% block content %}
+
+<div class="main-panel">        
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Category Table</h4>
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>
+                          Category Name
+                        </th>
+                        <th>
+                          Main Category Name
+                        </th>
+                        <th>
+                          Image
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in sub_categories %}
+                          
+                        <tr>
+                            <td>
+                          {{i.sub_categories_name}}
+                        </td>
+                        
+                        <td>
+                          {{i.main_categories}}
+                        </td>
+                        <td class="py-1">
+                          <i class="fas {{ i.image }} fa-3x text-primary mb-3"></i>
+                        </td>          
+                        <td>
+                            <a type="button" href="/admin/update_sub_category/{{ i.id }}" class="btn btn-dark btn-icon-text">
+                                Edit
+                                <i class="ti-file btn-icon-append"></i>                          
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger btn-icon-text" href="/admin/delete_sub_category/{{ i.id }}">
+                                Delete
+                                <i class="ti-trash btn-icon-prepend"></i> 
+                            </a>
+                            <!-- <button class="btn btn-danger btn-icon-text" onclick="deleteCategory({{ i.id }}, '{{ i.categories_name }}')">
+                                Delete
+                                <i class="ti-trash btn-icon-prepend"></i> 
+                            </button>
+                             -->
+                            </td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+   
+    <!-- content-wrapper ends -->
+  </div>
+{% endblock content %}
+
+
+{% block script %}
+
+ <!-- container-scroller -->
+ <!-- plugins:js -->
+ <script src="{% static 'admin/vendors/js/vendor.bundle.base.js' %}"></script>
+ <!-- endinject -->
+   <!-- inject:js -->
+    <script src="{% static 'admin/js/alerts.js' %}"></script>
+  <!-- Plugin js for this page-->
+  <script src="{% static 'admin/vendors/sweetalert/sweetalert.min.js' %}"></script>
+  <script src="{% static 'admin/vendors/jquery.avgrund/jquery.avgrund.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+  <script>
+    function deleteCategory(categoryId, categoryName) {
+          swal({
+              title: 'Are you sure?',
+              text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              showconfirmbutton:true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Yes, delete it!',
+              buttons: {
+                cancel: {
+                  text: "Cancel",
+                  value: null,
+                  visible: true,
+                  className: "btn btn-danger",
+                  closeModal: true,
+                },
+                confirm: {
+                  text: "OK",
+                  value: true,
+                  visible: true,
+                  className: "btn btn-primary",
+                  closeModal: true
+                }
+              }
+          }).then((result) => {
+                if (result.isConfirmed) {
+                    // If user confirms, submit the delete request
+                    window.location.href =  "/admin/delete_category/"+ categoryId + "/";
+
+              }
+          });
+      }
+  </script>
+  
+  {% endblock script %}
+  

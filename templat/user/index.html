@@ -1,0 +1,195 @@
+{% extends 'user/base.html' %}
+
+
+{% block style %}
+    
+{% endblock style %}
+    
+{% include 'messages.html' %}
+{% block content %}
+    
+
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="mb-4">Buy and Sell Anything Easily</h1>
+                    <p class="lead mb-5">Join thousands of users buying and selling products in your local area. Quick, safe, and easy.</p>
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg px-4 gap-3">
+                            <i class="fas fa-search me-2"></i>Browse Products
+                        </a>
+                        <a href="{% url 'sell' %}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-plus-circle me-2"></i>Sell Something
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Shop by Category</h2>
+            <div class="row g-4">
+                {% for categ in categories %}
+                  
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a href="{% url 'product_list' %}?category={{ categ.id }}" class="text-decoration-none">
+                        <div class="card category-card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas {{ categ.image }} fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">{{ categ.categories_name }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Latest Listings</h2>
+                <a href="{% url 'product_list' %}" class="btn btn-outline-primary">View All</a>
+            </div>
+            
+            <div class="row g-4">
+                <!--  Product  -->
+                  {% for prod in product %}
+                     
+                  <div class="col-md-6 col-lg-4 col-xl-3">
+                      <div class="card product-card h-100">
+                          <img src="{{ prod.image.url }}" class="card-img-top object-fit-md-contain " alt="{{ prod.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ prod.name }}</h5>
+                            <p class="price mb-1">₹{{ prod.price }}</p>
+                            <p class="location mb-2 d-flex align-items-center">
+                                <i class="fas fa-map-marker-alt me-1"></i> {{ prod.location }}
+                            </p>
+                            <p class="text-muted large mb-0">
+                                <span class="badge  bg-success">{{ prod.condition }}</span>
+                                <span class="float-end date">
+                                    <i class="far fa-clock me-1"></i> {{ prod.created_at|date:"M d" }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white p-3 border-top-0">
+                            <a href="{% url 'product_detail' prod.id %}" class="btn btn-primary d-block">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">How It Works</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card border-0 bg-transparent h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-camera fa-4x text-primary"></i>
+                            </div>
+                            <h4>1. List Your Item</h4>
+                            <p class="text-muted">Take photos of your item, add a description, set your price, and list it in minutes.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 bg-transparent h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-handshake fa-4x text-primary"></i>
+                            </div>
+                            <h4>2. Ad Last for 30 Days</h4>
+                            <p class="text-muted"> Listing Expired after 30 Days of publishing Buyers contact you with in 30 Days.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 bg-transparent h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-comments fa-4x text-primary"></i>
+                            </div>
+                            <h4>3. Connect with Buyers</h4>
+                            <p class="text-muted">Interested buyers will contact you through our messaging system to arrange a meeting.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 bg-transparent h-100">
+                        <div class="card-body text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-stopwatch fa-4x text-primary"></i>
+                            </div>
+                            <h4>4. Complete the Sale</h4>
+                            <p class="text-muted">Meet safely, exchange the item for payment, and mark the listing as sold.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Safely Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <img src="https://images.unsplash.com/photo-1516274626895-055a99214f08" alt="Safe shopping" class="img-fluid rounded">
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="mb-4">Shop Safely on Quick Trade</h2>
+                    <p class="lead mb-4">We prioritize your safety when buying and selling online.</p>
+                    
+                    <div class="d-flex mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-check-circle text-success fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Meet in Public Places</h5>
+                            <p class="text-muted">Always meet in well-lit, public locations when exchanging items.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-check-circle text-success fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Verify Before You Buy</h5>
+                            <p class="text-muted">Inspect items thoroughly before completing your purchase.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="fas fa-check-circle text-success fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Communicate Through the App</h5>
+                            <p class="text-muted">Keep all conversations within our messaging system for your protection.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+{% endblock content %} 
+   {% block script %}
+    
+   {% endblock script %}

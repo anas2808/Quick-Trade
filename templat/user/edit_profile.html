@@ -1,0 +1,70 @@
+{% extends 'user/base.html' %}
+
+
+{% block style %}
+    
+{% endblock style %}
+    
+{% include 'messages.html' %}
+{% block content %}
+    
+
+    <!-- Main Content -->
+    <main>
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-card auth-form">
+                        <h2 class="text-center mb-4">Create Your Account</h2>
+                        
+                        <form id="LoginForm" method="POST" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+
+                            
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                                <label class="form-check-label" for="termsCheck">
+                                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                                </label>
+                                <div class="invalid-feedback">
+                                    You must agree to our terms and conditions.
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>Edit Profile
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="mt-4 text-center">
+                            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% endblock content %} 
+    {% block script %}
+
+    <style>
+    .social-login-divider {
+        position: relative;
+        text-align: center;
+    }
+
+    .social-login-divider-text {
+        display: inline-block;
+        padding: 0 10px;
+        background: white;
+        position: relative;
+        top: -12px;
+        color: #6c757d;
+    }
+    </style>
+     
+    {% endblock script %}

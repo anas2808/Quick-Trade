@@ -1,0 +1,147 @@
+{% extends 'user/base.html' %}
+
+{% load status_colors %}
+{% block style %}
+    
+{% endblock style %}
+{% include 'messages.html' %}
+{% block content %}
+
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profile' %}">My Profile</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Messages</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Messages</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="#inbox" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active" data-bs-toggle="tab">
+                        <span><i class="fas fa-inbox me-2"></i>Inbox</span>
+                        {% if received_messages|length > 0 %}
+                        <span class="badge bg-primary rounded-pill">{{ received_messages|length }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="#sent" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" data-bs-toggle="tab">
+                        <span><i class="fas fa-paper-plane me-2"></i>Sent</span>
+                        {% if sent_messages|length > 0 %}
+                        <span class="badge bg-secondary rounded-pill">{{ sent_messages|length }}</span>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="tab-content">
+                <!-- Inbox Tab -->
+                <div class="tab-pane fade show active" id="inbox">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Inbox</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            {% if received_messages %}
+                            <div class="list-group list-group-flush">
+                                {% for message in received_messages %}
+                                <a href="/messages/{{message.id}}/" class="list-group-item list-group-item-action {% if not message.is_read %}bg-light{% endif %}">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ message.subject }}</h5>
+                                        <small>{{ message.created_at|date:"M d, Y" }}</small>
+                                    </div>
+                                    <p class="mb-1 text-truncate">{{ message.content }}</p>
+                                    <div class="d-flex align-items-center mt-2">
+                                        <small class="text-muted me-auto">
+                                            <i class="fas fa-user me-1"></i>From: {{ message.sender.username }}
+                                        </small>
+                                        {% if message.product %}
+                                        <span class="badge bg-info">
+                                            <i class="fas fa-tag me-1"></i>{{ message.product.name|truncatechars:20 }}
+                                        </span>
+                                        {% endif %}
+                                        {% if not message.is_read %}
+                                        <span class="badge bg-primary ms-2">New</span>
+                                        {% endif %}
+                                    </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="text-center py-5">
+                                <div class="mb-3">
+                                    <i class="far fa-envelope-open fa-4x text-muted"></i>
+                                </div>
+                                <h4>Your inbox is empty</h4>
+                                <p class="text-muted">You haven't received any messages yet.</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sent Tab -->
+                <div class="tab-pane fade" id="sent">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Sent Messages</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            {% if sent_messages %}
+                            <div class="list-group list-group-flush">
+                                {% for message in sent_messages %}
+                                <a href="/messages/{{message.id}}/" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ message.subject }}</h5>
+                                        <small>{{ message.created_at|date:"M d, Y" }}</small>
+                                    </div>
+                                    <p class="mb-1 text-truncate">{{ message.content }}</p>
+                                    <div class="d-flex align-items-center mt-2">
+                                        <small class="text-muted me-auto">
+                                            <i class="fas fa-user me-1"></i>To: {{ message.receiver.username }}
+                                        </small>
+                                        {% if message.product %}
+                                        <span class="badge bg-info">
+                                            <i class="fas fa-tag me-1"></i>{{ message.product.name|truncatechars:20 }}
+                                        </span>
+                                        {% endif %}
+                                        {% if message.is_read %}
+                                        <span class="badge bg-success ms-2">Read</span>
+                                        {% endif %}
+                                    </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="text-center py-5">
+                                <div class="mb-3">
+                                    <i class="far fa-paper-plane fa-4x text-muted"></i>
+                                </div>
+                                <h4>No sent messages</h4>
+                                <p class="text-muted">You haven't sent any messages yet.</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %} 
+
+{% block script %}
+
+
+
+{% endblock script %}
