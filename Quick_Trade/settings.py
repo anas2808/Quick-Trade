@@ -62,6 +62,13 @@ vercel_url = os.environ.get('VERCEL_URL')
 if vercel_url:
     ALLOWED_HOSTS.append(normalize_host(vercel_url))
 
+canonical_host = os.environ.get('APP_CANONICAL_HOST', 'quick-trade-sigma.vercel.app')
+if canonical_host:
+    ALLOWED_HOSTS.append(normalize_host(canonical_host))
+
+APP_CANONICAL_HOST = normalize_host(canonical_host) if canonical_host else None
+APP_CANONICAL_SCHEME = os.environ.get('APP_CANONICAL_SCHEME', 'https')
+
 CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app']
 if vercel_url:
     CSRF_TRUSTED_ORIGINS.append(normalize_origin(vercel_url))
@@ -82,6 +89,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'Quick_Trade.middleware.CanonicalHostMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
