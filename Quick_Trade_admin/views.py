@@ -1,20 +1,23 @@
-from django.shortcuts import get_object_or_404, render,redirect
-from Quick_Trade_admin.views import *
-from Quick_Trade_Client.views import *
-from Quick_Trade_admin.models import *
-from Quick_Trade_Client.models import *
-from Quick_Trade_admin.forms import *
-from Quick_Trade_Client.forms import *
-from django.contrib.auth.decorators import login_required ,permission_required,user_passes_test
-from django import template
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import get_object_or_404, render, redirect
+
+from Quick_Trade_Client.forms import EditProfileForm, LoginForm
+from Quick_Trade_Client.models import CustomUser, Product, main_categories
+from Quick_Trade_admin.forms import Categories, EditProfile
 
 def admin(user):
     return user.is_admin  
 
 
 def admin_login(request):
+    form = LoginForm(data=request.POST or None)
+    context = {
+        'form': form,
+    }
+
     if request.method == 'POST':
-        form = LoginForm(data=request.POST)
         if form.is_valid():
             user = authenticate(
                 request,
@@ -26,14 +29,9 @@ def admin_login(request):
                 if user.is_admin:
                     return redirect('admin_dash')
                 else:
-                    messages.warning("you are not admin")
+                    messages.warning(request, "You are not an admin.")
                     return redirect('/logout/')
-    else:
-        form = LoginForm()
-        
-        context={
-            'form':form
-        }
+
     return render(request,'admin/login.html',context)
   
 # Create your views here.
@@ -54,7 +52,7 @@ def edit_profile_view(request):
             return redirect('admin_dash')  
     else:
         form = EditProfileForm(instance=user)
-    return render(request, 'admin/admin_profile_edit.html', {'form': form})
+    return render(request, 'admin/admin_Profile_edit.html', {'form': form})
 
 
 
