@@ -1,0 +1,1 @@
+web: gunicorn Quick_Trade.wsgi:application

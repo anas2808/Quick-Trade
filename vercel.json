@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "python manage.py collectstatic --noinput",
+  "functions": {
+    "Quick_Trade/wsgi.py": {
+      "maxDuration": 60
+    }
+  }
+}

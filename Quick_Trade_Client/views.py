@@ -5,6 +5,7 @@ from .forms import UserRegistrationForm, LoginForm
 from django.contrib import messages
 from django.shortcuts import render
 from django.db.models import Q, Count
+from django.utils import timezone
 
 from .models import *
 from .forms import *
@@ -20,10 +21,6 @@ def listing_expiry_time():
             pass
             
 
-listing_expiry_time()
-    
-    
-    
 
 def index(request):
     listing_expiry_time()
@@ -194,7 +191,7 @@ def product_list(request):
         price_max=form.cleaned_data['price_max']
         # Price range filtering
         if form.cleaned_data.get('price_min'):
-            products = Product.objectsfilter(ad_status='Active',price__gte=price_min)
+            products = Product.objects.filter(ad_status='Active',price__gte=price_min)
         
         if form.cleaned_data.get('price_max'):
             products = Product.objects.filter(ad_status='Active',price__lte=price_max)

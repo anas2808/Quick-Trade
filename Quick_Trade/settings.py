@@ -12,24 +12,46 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from urllib.parse import urlparse
+
+
+def get_env_bool(name, default=False):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.lower() in {'1', 'true', 'yes', 'on'}
+
+
+def get_env_list(name, default=None):
+    value = os.environ.get(name)
+    if not value:
+        return default or []
+    return [item.strip() for item in value.split(',') if item.strip()]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATES_DIR =os.path.join(BASE_DIR,'Templat')
-MEDIA_ROOT=os.path.join(BASE_DIR,'media')
-MEDIA_URL=('/media/')
-STATICFILES_DIRS=(os.path.join(BASE_DIR,"static"),)
+TEMPLATES_DIR = BASE_DIR / 'templat'
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+STATICFILES_DIRS = (BASE_DIR / 'static',)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^!$6)sgbe!fkm5z1k-w43xc31eoh7+)afhn)je75-zu3l-r^+^'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-^!$6)sgbe!fkm5z1k-w43xc31eoh7+)afhn)je75-zu3l-r^+^')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_env_bool('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = get_env_list('DJANGO_ALLOWED_HOSTS', ['localhost', '127.0.0.1'])
+vercel_url = os.environ.get('VERCEL_URL')
+if vercel_url:
+    ALLOWED_HOSTS.append(vercel_url)
+
+CSRF_TRUSTED_ORIGINS = []
+if vercel_url:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{vercel_url}')
 
 
 # Application definition
@@ -85,6 +107,19 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+    
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    parsed_url = urlparse(database_url)
+    if parsed_url.scheme in {'postgres', 'postgresql', 'postgresql+psycopg2', 'postgresql+psycopg'}:
+        DATABASES['default'] = {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': parsed_url.path.lstrip('/'),
+            'USER': parsed_url.username or '',
+            'PASSWORD': parsed_url.password or '',
+            'HOST': parsed_url.hostname or '',
+            'PORT': parsed_url.port or '',
+        }
 
 
 # Password validation
@@ -122,7 +157,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfile'
 
