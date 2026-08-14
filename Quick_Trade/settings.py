@@ -28,6 +28,17 @@ def get_env_list(name, default=None):
         return default or []
     return [item.strip() for item in value.split(',') if item.strip()]
 
+
+def normalize_host(value):
+    parsed = urlparse(value if '://' in value else f'//{value}')
+    return parsed.hostname or value
+
+
+def normalize_origin(value):
+    if value.startswith('http://') or value.startswith('https://'):
+        return value
+    return f'https://{value}'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / 'templat'
@@ -44,14 +55,16 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-^!$6)sgbe!fkm5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_env_bool('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = get_env_list('DJANGO_ALLOWED_HOSTS', ['localhost', '127.0.0.1'])
+ALLOWED_HOSTS = [normalize_host(host) for host in get_env_list('DJANGO_ALLOWED_HOSTS', ['localhost', '127.0.0.1'])]
+ALLOWED_HOSTS += ['.vercel.app']
+
 vercel_url = os.environ.get('VERCEL_URL')
 if vercel_url:
-    ALLOWED_HOSTS.append(vercel_url)
+    ALLOWED_HOSTS.append(normalize_host(vercel_url))
 
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app']
 if vercel_url:
-    CSRF_TRUSTED_ORIGINS.append(f'https://{vercel_url}')
+    CSRF_TRUSTED_ORIGINS.append(normalize_origin(vercel_url))
 
 
 # Application definition
