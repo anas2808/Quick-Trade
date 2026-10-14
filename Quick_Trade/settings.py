@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 from urllib.parse import urlparse
 
+from django.core.exceptions import ImproperlyConfigured
+
 
 def get_env_bool(name, default=False):
     value = os.environ.get(name)
@@ -119,33 +121,44 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Quick_Trade.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-    
+# Use a managed PostgreSQL database in Vercel. SQLite remains a local-development
+# fallback only; Vercel's serverless filesystem is not persistent or shared.
 database_url = os.environ.get('DATABASE_URL')
+is_vercel = any(os.environ.get(name) for name in ('VERCEL', 'VERCEL_ENV', 'VERCEL_URL'))
+
 if database_url:
-    parsed_url = urlparse(database_url)
-    if parsed_url.scheme in {'postgres', 'postgresql', 'postgresql+psycopg2', 'postgresql+psycopg'}:
-        DATABASES['default'] = {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': parsed_url.path.lstrip('/'),
-            'USER': parsed_url.username or '',
-            'PASSWORD': parsed_url.password or '',
-            'HOST': parsed_url.hostname or '',
-            'PORT': parsed_url.port or '',
+    parsed_database_url = urlparse(database_url)
+    if parsed_database_url.scheme not in {'postgres', 'postgresql'}:
+        raise ImproperlyConfigured(
+            'DATABASE_URL must point to a persistent PostgreSQL database.'
+        )
+
+    import dj_database_url
+
+    DATABASES = {
+        'default': dj_database_url.parse(
+            database_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+elif is_vercel:
+    raise ImproperlyConfigured(
+        'DATABASE_URL is required on Vercel. Configure a managed PostgreSQL database '
+        'in the Vercel project environment variables before deploying.'
+    )
+else:
+    # Local development only. Do not use this database for production data.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
+    }
 
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -164,7 +177,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'Quick_Trade_Client.CustomUser'
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
+# https://docs.djangoproject.com/en/5.1/ref/settings/#internationalization
 
 LANGUAGE_CODE = 'en-us'
 
@@ -179,7 +192,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
 STATIC_ROOT = BASE_DIR / 'staticfile'
 
 LOGIN_URL = '/login/'
