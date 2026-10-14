@@ -123,14 +123,21 @@ WSGI_APPLICATION = 'Quick_Trade.wsgi.application'
 
 # Use a managed PostgreSQL database in Vercel. SQLite remains a local-development
 # fallback only; Vercel's serverless filesystem is not persistent or shared.
-database_url = os.environ.get('DATABASE_URL')
+# Accept the common variable names injected by managed PostgreSQL providers.
+# Prefer DATABASE_URL when explicitly configured, then provider-standard aliases.
+database_url = (
+    os.environ.get('DATABASE_URL')
+    or os.environ.get('POSTGRES_URL')
+    or os.environ.get('POSTGRES_PRISMA_URL')
+    or os.environ.get('POSTGRES_URL_NON_POOLING')
+)
 is_vercel = any(os.environ.get(name) for name in ('VERCEL', 'VERCEL_ENV', 'VERCEL_URL'))
 
 if database_url:
     parsed_database_url = urlparse(database_url)
     if parsed_database_url.scheme not in {'postgres', 'postgresql'}:
         raise ImproperlyConfigured(
-            'DATABASE_URL must point to a persistent PostgreSQL database.'
+            'Configure a PostgreSQL URL in DATABASE_URL, POSTGRES_URL, POSTGRES_PRISMA_URL, or POSTGRES_URL_NON_POOLING.'
         )
 
     import dj_database_url
@@ -144,7 +151,7 @@ if database_url:
     }
 elif is_vercel:
     raise ImproperlyConfigured(
-        'DATABASE_URL is required on Vercel. Configure a managed PostgreSQL database '
+        'A PostgreSQL connection URL is required on Vercel. Set DATABASE_URL or a supported POSTGRES_* variable '
         'in the Vercel project environment variables before deploying.'
     )
 else:
