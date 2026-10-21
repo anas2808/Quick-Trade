@@ -291,3 +291,153 @@ body .footer { background: transparent; }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+
+/* QuickTrade form system — consistent styling for Django widgets and existing templates. */
+.form-card {
+    width: 100%;
+    padding: clamp(22px, 4vw, 38px);
+    border: 1px solid #e6e9f0;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 14px 38px rgba(11, 18, 32, .08);
+}
+.form-card h1, .form-card h2, .form-card h3, .form-card h4 {
+    color: var(--qt-navy);
+    font-weight: 800;
+    letter-spacing: -.45px;
+}
+.form-card > form > p,
+.form-card form p {
+    margin: 0 0 19px;
+    color: #374151;
+    font-size: 13px;
+}
+.form-card form p > label,
+.form-card form .form-label {
+    display: block;
+    margin: 0 0 8px;
+    color: #263247;
+    font-size: 12px;
+    font-weight: 700;
+}
+.form-card .form-control,
+.form-card .form-select,
+form .form-control,
+form .form-select {
+    min-height: 46px;
+    padding: 11px 13px;
+    border: 1px solid #dce1ea;
+    border-radius: 9px;
+    background-color: #fff;
+    color: #111827;
+    font-size: 13px;
+    box-shadow: none;
+    transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.form-card textarea.form-control,
+form textarea.form-control {
+    min-height: 125px;
+    resize: vertical;
+}
+.form-card .form-control::placeholder,
+form .form-control::placeholder {
+    color: #9aa3b2;
+    opacity: 1;
+}
+.form-card .form-control:focus,
+.form-card .form-select:focus,
+form .form-control:focus,
+form .form-select:focus {
+    border-color: var(--qt-orange);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(247, 147, 30, .14);
+    outline: 0;
+}
+.form-card input[type="file"].form-control {
+    min-height: auto;
+    padding: 9px;
+    background: #fafbfc;
+}
+.form-card input[type="file"]::file-selector-button {
+    margin: -3px 10px -3px -3px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: #fff0dc;
+    color: #8a4a08;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.form-card .helptext,
+.form-card form p > span {
+    display: block;
+    margin-top: 6px;
+    color: #7b8493;
+    font-size: 11px;
+    line-height: 1.6;
+}
+.form-card .errorlist,
+.form-card .invalid-feedback,
+form .errorlist {
+    margin: 7px 0 0;
+    padding: 0;
+    color: #b42318;
+    font-size: 12px;
+    list-style: none;
+}
+.form-card .errorlist li { margin-top: 4px; }
+.form-card .btn-primary,
+form .btn-primary {
+    min-height: 46px;
+    border: 1px solid var(--qt-orange);
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--qt-orange-light), var(--qt-orange));
+    color: #111827;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 7px 17px rgba(247, 147, 30, .17);
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.form-card .btn-primary:hover,
+form .btn-primary:hover {
+    border-color: var(--qt-orange);
+    background: var(--qt-orange);
+    color: #111827;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(247, 147, 30, .24);
+}
+.form-card .btn-outline-secondary {
+    border-radius: 9px;
+}
+.auth-form { max-width: 640px; margin: 0 auto; }
+.auth-form h2 { margin-bottom: 26px !important; }
+.auth-form form > p { margin-bottom: 18px; }
+.form-card .form-check-input { border-color: #cbd2de; }
+.form-card .form-check-input:checked { border-color: var(--qt-orange); background-color: var(--qt-orange); }
+.form-card .form-check-input:focus { border-color: var(--qt-orange); box-shadow: 0 0 0 4px rgba(247, 147, 30, .14); }
+.filter-section {
+    padding: 23px;
+    border: 1px solid #e6e9f0;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(11, 18, 32, .05);
+}
+.filter-section > h5 { color: var(--qt-navy); font-weight: 800; }
+.filter-section .form-label { margin-bottom: 8px; color: #374151; font-size: 12px; font-weight: 700; }
+.filter-section .form-check { margin-bottom: 8px; }
+.filter-section .form-check-label { color: #4b5563; font-size: 12px; }
+.filter-section .form-check-input:checked { border-color: var(--qt-orange); background-color: var(--qt-orange); }
+.filter-section .input-group-text {
+    border-color: #dce1ea;
+    border-radius: 9px 0 0 9px;
+    background: #f7f8fb;
+    color: #6b7280;
+}
+.filter-section .input-group .form-control { border-radius: 0 9px 9px 0; }
+.product-reference { border: 1px solid #e6e9f0; }
+@media (max-width: 575.98px) {
+    .form-card { padding: 21px 17px; border-radius: 14px; }
+    .form-card .btn-lg { font-size: 13px; }
+    .filter-section { padding: 18px; }
+}
