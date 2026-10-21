@@ -1,87 +1,166 @@
 {% extends 'user/base.html' %}
+{% load static %}
 
+{% block title %}Create Account — QuickTrade{% endblock %}
 
 {% block style %}
-    
+<style>
+.qt-register-page{display:grid;grid-template-columns:minmax(0,1fr) minmax(500px,1fr);min-height:calc(100vh - 78px);background:var(--qt-page)}
+.qt-register-welcome{position:relative;display:flex;flex-direction:column;overflow:hidden;padding:clamp(42px,5vw,72px) clamp(26px,5vw,72px) 32px;color:#fff;background:radial-gradient(ellipse at 70% 25%,#4a2a14 0%,#1a1d2e 45%,#0b1220 82%)}
+.qt-register-welcome>*{position:relative}.qt-register-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;color:var(--qt-orange-light);font-size:11px;font-weight:700;letter-spacing:1.2px}.qt-register-eyebrow:before{content:"";width:23px;height:3px;background:var(--qt-orange)}
+.qt-register-welcome h1{max-width:620px;margin:0;color:#fff;font-size:clamp(36px,4vw,56px);font-weight:800;line-height:1.08;letter-spacing:-1.3px}.qt-register-welcome h1 span{color:var(--qt-orange)}
+.qt-register-lead{max-width:510px;margin:20px 0 26px;color:#dce1e9;font-size:13px;line-height:1.9}
+.qt-register-features{display:grid;gap:17px;margin:0;padding:0;list-style:none}.qt-register-features li{display:flex;align-items:center;gap:14px;max-width:390px;color:#cbd5e1;font-size:12px;line-height:1.6}.qt-register-feature-icon{display:grid;place-items:center;flex:0 0 46px;width:46px;height:46px;border-radius:50%;background:var(--qt-orange);color:#111827;font-size:18px}.qt-register-features strong{display:block;color:#fff;font-size:13px}
+.qt-register-art{display:flex;align-items:center;justify-content:center;gap:clamp(5px,1vw,15px);flex:1;min-height:145px;padding-top:22px;font-size:clamp(35px,4.5vw,64px)}.qt-register-art span{filter:drop-shadow(0 10px 12px #0005)}
+.qt-register-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:17px 12px;border:1px solid #ffffff24;border-radius:13px;background:#0b122066}.qt-register-stat{text-align:center;color:#cbd5e1;font-size:10px}.qt-register-stat strong{display:block;color:#fff;font-size:18px}
+.qt-register-panel{position:relative;display:grid;place-items:center;overflow:hidden;padding:40px clamp(16px,3vw,42px);background:var(--qt-page)}.qt-register-panel:before,.qt-register-panel:after{position:absolute;content:"";border-radius:50%;background:#f7931e17;pointer-events:none}.qt-register-panel:before{width:300px;height:300px;top:-120px;right:-110px}.qt-register-panel:after{width:230px;height:230px;bottom:-100px;left:-90px}
+.qt-register-wrap{position:relative;z-index:1;width:100%;max-width:640px}.qt-register-card{padding:clamp(23px,3vw,34px);border:1px solid #e5e7eb;border-radius:17px;background:var(--qt-white);box-shadow:0 18px 50px #0b122012}
+.qt-register-head{text-align:center;margin-bottom:22px}.qt-register-mark{display:grid;place-items:center;width:48px;height:48px;margin:0 auto 12px;border-radius:14px;background:#fff0dc;color:#9a530a;font-size:20px}.qt-register-head h2{margin:0;color:var(--qt-navy);font-size:clamp(23px,2.4vw,29px);font-weight:800;letter-spacing:-.7px}.qt-register-head h2 span{color:var(--qt-orange)}.qt-register-subtitle{margin:7px 0 0;color:var(--qt-muted);font-size:12px}
+.qt-register-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}.qt-register-field{min-width:0;margin-bottom:13px}.qt-register-field.full{grid-column:1/-1}.qt-register-field label{display:block;margin-bottom:6px;color:#263247;font-size:12px;font-weight:700}.qt-register-required{color:#dc2626}
+.qt-register-input-wrap{display:flex;align-items:center;gap:10px;min-height:46px;padding:0 12px;border:1px solid #dce1ea;border-radius:8px;background:#fff;color:#929bab;transition:border-color .18s,box-shadow .18s}.qt-register-input-wrap:focus-within{border-color:var(--qt-orange);box-shadow:0 0 0 3px #f7931e22}.qt-register-input-wrap.has-error{border-color:#dc2626}.qt-register-input-wrap>i{width:16px;text-align:center}.qt-register-input-wrap input{flex:1;width:100%;min-width:0;height:43px;padding:0;border:0;outline:0;background:transparent;color:#111827;font:inherit;font-size:12px;box-shadow:none}.qt-register-input-wrap input::placeholder{color:#9aa3b2}.qt-register-eye{padding:5px 1px;color:#687386}
+.qt-register-error{margin-top:5px;color:#b42318;font-size:11px}.qt-register-alert{margin-bottom:15px;padding:11px 13px;border:1px solid #fecaca;border-radius:8px;background:#fef2f2;color:#b91c1c;font-size:12px}.qt-register-terms{display:flex;align-items:flex-start;gap:9px;margin:3px 0 15px;color:#5b6473;font-size:11px;line-height:1.7}.qt-register-terms input{flex:none;width:16px;height:16px;margin-top:2px;accent-color:var(--qt-orange)}.qt-register-terms a{color:#b9680b;font-weight:700;text-decoration:underline}
+.qt-register-strength{height:4px;margin:0 0 5px;overflow:hidden;border-radius:3px;background:#e5e7eb}.qt-register-strength span{display:block;width:0;height:100%;background:#dc2626;transition:width .2s,background .2s}
+.qt-register-submit{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:49px;border:0;border-radius:9px;background:linear-gradient(135deg,var(--qt-orange-light),var(--qt-orange));color:#171717;font-size:13px;font-weight:800;box-shadow:0 8px 18px #f7931e33}.qt-register-submit:hover{filter:brightness(1.02);transform:translateY(-1px)}.qt-register-login{margin:18px 0 0;text-align:center;color:#697386;font-size:12px}.qt-register-login a{margin-left:4px;color:#b9680b;font-weight:800}.qt-register-security{display:flex;align-items:center;gap:12px;max-width:540px;margin:15px auto 0;padding:13px 15px;border:1px solid #eceef3;border-radius:11px;background:#ffffffbf}.qt-register-security-icon{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:9px;background:#fff0dc;color:#9a530a;font-size:17px}.qt-register-security strong{display:block;color:#253047;font-size:11px}.qt-register-security p{margin:3px 0 0;color:var(--qt-muted);font-size:10px;line-height:1.6}
+@media(max-width:1050px){.qt-register-page{grid-template-columns:1fr}.qt-register-welcome{padding:40px clamp(22px,6vw,60px) 28px}.qt-register-welcome h1{font-size:clamp(36px,6vw,52px)}.qt-register-features{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.qt-register-features li{align-items:flex-start}.qt-register-art{min-height:100px}.qt-register-stats{max-width:620px;width:100%;margin:0 auto}.qt-register-panel{padding:34px 18px 44px}}
+@media(max-width:575px){.qt-register-welcome{padding:32px 20px 24px}.qt-register-welcome h1{font-size:36px}.qt-register-lead{font-size:12px;margin:15px 0 20px}.qt-register-features{gap:14px 10px}.qt-register-features li{gap:9px;font-size:10px}.qt-register-feature-icon{flex-basis:36px;width:36px;height:36px;font-size:14px}.qt-register-features strong{font-size:11px}.qt-register-art{font-size:32px;min-height:86px}.qt-register-stats{gap:5px;padding:13px 6px}.qt-register-stat strong{font-size:16px}.qt-register-stat{font-size:9px}.qt-register-panel{padding:24px 12px 34px}.qt-register-card{padding:23px 16px;border-radius:14px}.qt-register-grid{grid-template-columns:1fr}.qt-register-field.full{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){.qt-register-input-wrap,.qt-register-strength span,.qt-register-submit{transition:none}}
+</style>
 {% endblock style %}
-    
 
 {% block content %}
-    
+<main class="qt-register-page">
+    <section class="qt-register-welcome" aria-label="Welcome to QuickTrade">
+        <div class="qt-register-eyebrow">JOIN QUICKTRADE</div>
+        <h1>Create Your Account <span>Today.</span></h1>
+        <p class="qt-register-lead">Sign up and start buying, selling and trading with people in your local community. It's quick, free and easy.</p>
+        <ul class="qt-register-features">
+            <li><span class="qt-register-feature-icon"><i class="fas fa-users" aria-hidden="true"></i></span><span><strong>Join a Trusted Community</strong>Connect with buyers and sellers in your area.</span></li>
+            <li><span class="qt-register-feature-icon"><i class="fas fa-tags" aria-hidden="true"></i></span><span><strong>List Your Items</strong>Sell your unused items easily.</span></li>
+            <li><span class="qt-register-feature-icon"><i class="fas fa-comments" aria-hidden="true"></i></span><span><strong>Chat with Buyers</strong>Contact other members through QuickTrade.</span></li>
+            <li><span class="qt-register-feature-icon"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span><span><strong>Find Great Deals</strong>Discover useful listings near you.</span></li>
+        </ul>
+        <div class="qt-register-art" aria-hidden="true"><span>🚗</span><span>📱</span><span>💻</span><span>🏍️</span><span>👟</span><span>⌚</span></div>
+        <div class="qt-register-stats" aria-label="QuickTrade benefits">
+            <div class="qt-register-stat"><strong><i class="fas fa-users"></i></strong>Local community</div>
+            <div class="qt-register-stat"><strong><i class="fas fa-box-open"></i></strong>Useful finds</div>
+            <div class="qt-register-stat"><strong><i class="fas fa-handshake"></i></strong>Direct connections</div>
+        </div>
+    </section>
 
-    <!-- Main Content -->
-    <main>
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="form-card auth-form">
-                        <h2 class="text-center mb-4">Create Your Account</h2>
-                        
-                        <form id="LoginForm" method="POST" action="{% url 'register' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            
-                            
-                            <div class="mb-4 form-check">
-                                <input type="checkbox" class="form-check-input" id="termsCheck" required>
-                                <label class="form-check-label" for="termsCheck">
-                                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-                                </label>
-                                <div class="invalid-feedback">
-                                    You must agree to our terms and conditions.
-                                </div>
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-user-plus me-2"></i>Create Account
-                                </button>
-                            </div>
-                        </form>
-                        
-                        <div class="mt-4 text-center">
-                            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
-                        </div>
-<!--                         
-                        <div class="social-login-divider">
-                            <hr class="my-4">
-                            <span class="social-login-divider-text">or register with</span>
-                        </div> -->
-                        
-                        <!-- <div class="row g-2 social-login">
-                            <div class="col">
-                                <a href="#" class="btn btn-outline-secondary w-100">
-                                    <i class="fab fa-google me-2"></i>Google
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="#" class="btn btn-outline-secondary w-100">
-                                    <i class="fab fa-facebook-f me-2"></i>Facebook
-                                </a>
-                            </div>
-                        </div> -->
-                    </div>
+    <section class="qt-register-panel" aria-label="Create account form">
+        <div class="qt-register-wrap">
+            <div class="qt-register-card">
+                <div class="qt-register-head">
+                    <div class="qt-register-mark"><i class="fas fa-user-plus" aria-hidden="true"></i></div>
+                    <h2>Create Your Quick<span>Trade</span> Account</h2>
+                    <p class="qt-register-subtitle">Join our community and start buying and selling today.</p>
                 </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="qt-register-alert" role="status">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                {% if form.non_field_errors %}
+                    <div class="qt-register-alert" role="alert">{% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}</div>
+                {% endif %}
+
+                <form id="qtRegisterForm" method="POST" action="{% url 'register' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="qt-register-grid">
+                        <div class="qt-register-field full">
+                            <label for="{{ form.full_name.id_for_label }}">Full name <span class="qt-register-required">*</span></label>
+                            <div class="qt-register-input-wrap {% if form.full_name.errors %}has-error{% endif %}"><i class="far fa-user" aria-hidden="true"></i>{{ form.full_name }}</div>
+                            {% for error in form.full_name.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="qt-register-field">
+                            <label for="{{ form.email.id_for_label }}">Email address <span class="qt-register-required">*</span></label>
+                            <div class="qt-register-input-wrap {% if form.email.errors %}has-error{% endif %}"><i class="far fa-envelope" aria-hidden="true"></i>{{ form.email }}</div>
+                            {% for error in form.email.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="qt-register-field">
+                            <label for="{{ form.phone.id_for_label }}">Phone number <span class="qt-register-required">*</span></label>
+                            <div class="qt-register-input-wrap {% if form.phone.errors %}has-error{% endif %}"><i class="fas fa-phone" aria-hidden="true"></i>{{ form.phone }}</div>
+                            {% for error in form.phone.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="qt-register-field">
+                            <label for="{{ form.password.id_for_label }}">Password <span class="qt-register-required">*</span></label>
+                            <div class="qt-register-input-wrap {% if form.password.errors %}has-error{% endif %}"><i class="fas fa-lock" aria-hidden="true"></i>{{ form.password }}<button type="button" class="qt-register-eye" data-password-target="{{ form.password.id_for_label }}" aria-label="Show password"><i class="far fa-eye"></i></button></div>
+                            <div class="qt-register-strength" aria-hidden="true"><span id="qtPasswordStrength"></span></div>
+                            {% for error in form.password.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="qt-register-field">
+                            <label for="{{ form.confirm_password.id_for_label }}">Confirm password <span class="qt-register-required">*</span></label>
+                            <div class="qt-register-input-wrap {% if form.confirm_password.errors %}has-error{% endif %}"><i class="fas fa-lock" aria-hidden="true"></i>{{ form.confirm_password }}<button type="button" class="qt-register-eye" data-password-target="{{ form.confirm_password.id_for_label }}" aria-label="Show password"><i class="far fa-eye"></i></button></div>
+                            {% for error in form.confirm_password.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="qt-register-terms">
+                        {{ form.terms_accepted }}
+                        <label for="{{ form.terms_accepted.id_for_label }}">I agree to the <a href="#" data-terms-link>Terms of Service</a> and <a href="#" data-terms-link>Privacy Policy</a>.</label>
+                    </div>
+                    {% for error in form.terms_accepted.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+
+                    <button type="submit" class="qt-register-submit" id="qtRegisterSubmit"><i class="fas fa-user-plus" aria-hidden="true"></i> Create Account</button>
+                </form>
+                <p class="qt-register-login">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+            </div>
+            <div class="qt-register-security">
+                <span class="qt-register-security-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></span>
+                <div><strong>Your account is protected</strong><p>Your password is stored using Django's password hashing. Use a strong, unique password for your account.</p></div>
             </div>
         </div>
-    </main>
-    {% endblock content %} 
-    {% block script %}
+    </section>
+</main>
+{% endblock content %}
 
-    <style>
-    .social-login-divider {
-        position: relative;
-        text-align: center;
+{% block script %}
+<script>
+(function () {
+    document.querySelectorAll('.qt-register-eye').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var input = document.getElementById(button.dataset.passwordTarget);
+            if (!input) return;
+            var show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            button.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            button.innerHTML = show ? '<i class="far fa-eye-slash" aria-hidden="true"></i>' : '<i class="far fa-eye" aria-hidden="true"></i>';
+        });
+    });
+
+    var password = document.getElementById('{{ form.password.id_for_label }}');
+    var strength = document.getElementById('qtPasswordStrength');
+    if (password && strength) {
+        password.addEventListener('input', function () {
+            var value = password.value;
+            var score = 0;
+            if (value.length >= 8) score++;
+            if (value.length >= 12) score++;
+            if (/[a-z]/.test(value) && /[A-Z]/.test(value)) score++;
+            if (/\d/.test(value) && /[^A-Za-z0-9]/.test(value)) score++;
+            strength.style.width = (value ? Math.max(score, 1) * 25 : 0) + '%';
+            strength.style.background = score < 2 ? '#dc2626' : score < 4 ? '#f7931e' : '#16a34a';
+        });
     }
 
-    .social-login-divider-text {
-        display: inline-block;
-        padding: 0 10px;
-        background: white;
-        position: relative;
-        top: -12px;
-        color: #6c757d;
+    var form = document.getElementById('qtRegisterForm');
+    if (form) {
+        form.addEventListener('submit', function () {
+            var button = document.getElementById('qtRegisterSubmit');
+            if (button) {
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Creating account...';
+            }
+        });
     }
-    </style>
-     
-    {% endblock script %}
+
+    document.querySelectorAll('[data-terms-link]').forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            alert('Please contact QuickTrade support for the current Terms of Service and Privacy Policy.');
+        });
+    });
+})();
+</script>
+{% endblock script %}
