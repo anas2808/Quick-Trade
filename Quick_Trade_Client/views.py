@@ -73,6 +73,12 @@ def login_view(request):
             )
             if user:
                 login(request, user)
+                # Keep the session only for the browser session unless "Remember me" is selected.
+                if request.POST.get('rememberMe'):
+                    request.session.set_expiry(1209600)  # 14 days
+                else:
+                    request.session.set_expiry(0)
+
                 if user.is_admin:
                     return redirect('admin_dash')
                 else:
