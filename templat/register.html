@@ -68,10 +68,20 @@
                 <form id="qtRegisterForm" method="POST" action="{% url 'register' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="qt-register-grid">
+                        <div class="qt-register-field">
+                            <label for="{{ form.first_name.id_for_label }}">First name <span class="qt-register-required">*</span></label>
+                            <div class="qt-register-input-wrap {% if form.first_name.errors %}has-error{% endif %}"><i class="far fa-user" aria-hidden="true"></i>{{ form.first_name }}</div>
+                            {% for error in form.first_name.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="qt-register-field">
+                            <label for="{{ form.last_name.id_for_label }}">Last name <span class="qt-register-required">*</span></label>
+                            <div class="qt-register-input-wrap {% if form.last_name.errors %}has-error{% endif %}"><i class="far fa-user" aria-hidden="true"></i>{{ form.last_name }}</div>
+                            {% for error in form.last_name.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                        </div>
                         <div class="qt-register-field full">
-                            <label for="{{ form.full_name.id_for_label }}">Full name <span class="qt-register-required">*</span></label>
-                            <div class="qt-register-input-wrap {% if form.full_name.errors %}has-error{% endif %}"><i class="far fa-user" aria-hidden="true"></i>{{ form.full_name }}</div>
-                            {% for error in form.full_name.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                            <label for="{{ form.username.id_for_label }}">Username <span class="qt-register-required">*</span></label>
+                            <div class="qt-register-input-wrap {% if form.username.errors %}has-error{% endif %}"><i class="fas fa-at" aria-hidden="true"></i>{{ form.username }}</div>
+                            {% for error in form.username.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
                         </div>
                         <div class="qt-register-field">
                             <label for="{{ form.email.id_for_label }}">Email address <span class="qt-register-required">*</span></label>
@@ -93,6 +103,16 @@
                             <label for="{{ form.confirm_password.id_for_label }}">Confirm password <span class="qt-register-required">*</span></label>
                             <div class="qt-register-input-wrap {% if form.confirm_password.errors %}has-error{% endif %}"><i class="fas fa-lock" aria-hidden="true"></i>{{ form.confirm_password }}<button type="button" class="qt-register-eye" data-password-target="{{ form.confirm_password.id_for_label }}" aria-label="Show password"><i class="far fa-eye"></i></button></div>
                             {% for error in form.confirm_password.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="qt-register-field full">
+                            <label for="{{ form.profile_picture.id_for_label }}">Profile picture <span style="color:#697386;font-weight:400">(optional)</span></label>
+                            {{ form.profile_picture }}
+                            {% for error in form.profile_picture.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="qt-register-field full">
+                            <label for="{{ form.bio.id_for_label }}">About you <span style="color:#697386;font-weight:400">(optional)</span></label>
+                            {{ form.bio }}
+                            {% for error in form.bio.errors %}<div class="qt-register-error" role="alert">{{ error }}</div>{% endfor %}
                         </div>
                     </div>
 
