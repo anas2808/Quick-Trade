@@ -1,70 +1,65 @@
 {% extends 'user/base.html' %}
+{% load static %}
 
+{% block title %}Edit Profile — QuickTrade{% endblock %}
 
-{% block style %}
-    
-{% endblock style %}
-    
-{% include 'messages.html' %}
+{% block style %}{% endblock style %}
+
 {% block content %}
-    
+{% include 'messages.html' %}
+<main>
+    <div class="container py-5">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'profile' %}">My Profile</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+            </ol>
+        </nav>
 
-    <!-- Main Content -->
-    <main>
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="form-card auth-form">
-                        <h2 class="text-center mb-4">Create Your Account</h2>
-                        
-                        <form id="LoginForm" method="POST" action="" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-
-                            
-                            <div class="mb-4 form-check">
-                                <input type="checkbox" class="form-check-input" id="termsCheck" required>
-                                <label class="form-check-label" for="termsCheck">
-                                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-                                </label>
-                                <div class="invalid-feedback">
-                                    You must agree to our terms and conditions.
-                                </div>
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-user-plus me-2"></i>Edit Profile
-                                </button>
-                            </div>
-                        </form>
-                        
-                        <div class="mt-4 text-center">
-                            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
-                        </div>
-
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-xl-6">
+                <section class="form-card auth-form">
+                    <div class="mb-4">
+                        <span class="qt-section-kicker"><i class="fas fa-user-edit"></i> ACCOUNT SETTINGS</span>
+                        <h2 class="mt-2 mb-2">Edit your profile</h2>
+                        <p class="text-muted mb-0">Keep your contact details and profile information up to date.</p>
                     </div>
-                </div>
+
+                    <form method="POST" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+                        {% endif %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="helptext">{{ field.help_text|safe }}</div>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in field.errors %}<div>{{ error }}</div>{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary flex-grow-1">
+                                <i class="fas fa-check me-2"></i>Save Changes
+                            </button>
+                            <a href="{% url 'profile' %}" class="btn btn-outline-secondary px-4">Cancel</a>
+                        </div>
+                    </form>
+                </section>
             </div>
         </div>
-    </main>
-    {% endblock content %} 
-    {% block script %}
+    </div>
+</main>
+{% endblock content %}
 
-    <style>
-    .social-login-divider {
-        position: relative;
-        text-align: center;
-    }
-
-    .social-login-divider-text {
-        display: inline-block;
-        padding: 0 10px;
-        background: white;
-        position: relative;
-        top: -12px;
-        color: #6c757d;
-    }
-    </style>
-     
-    {% endblock script %}
+{% block script %}{% endblock script %}
