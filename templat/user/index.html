@@ -1,195 +1,128 @@
 {% extends 'user/base.html' %}
+{% load static %}
+{% block title %}QuickTrade — Buy, Sell &amp; Trade Locally{% endblock %}
 
-
-{% block style %}
-    
-{% endblock style %}
-    
-{% include 'messages.html' %}
 {% block content %}
-    
-
-    <!-- Hero Section -->
-    <section class="hero-section text-center">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <h1 class="mb-4">Buy and Sell Anything Easily</h1>
-                    <p class="lead mb-5">Join thousands of users buying and selling products in your local area. Quick, safe, and easy.</p>
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                        <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg px-4 gap-3">
-                            <i class="fas fa-search me-2"></i>Browse Products
-                        </a>
-                        <a href="{% url 'sell' %}" class="btn btn-outline-light btn-lg px-4">
-                            <i class="fas fa-plus-circle me-2"></i>Sell Something
-                        </a>
-                    </div>
+<main class="qt-home">
+    {% include 'messages.html' %}
+    <section class="qt-hero">
+        <div class="qt-hero-inner">
+            <div class="qt-hero-copy">
+                <span class="qt-eyebrow"><i class="fas fa-map-marker-alt"></i> YOUR COMMUNITY MARKETPLACE</span>
+                <h1>Buy, Sell &amp;<br>Trade <span>Locally.</span></h1>
+                <p>Find great deals around you or give your unused items a new home. Simple, convenient and closer to home.</p>
+                <form class="qt-hero-search" action="{% url 'product_list' %}" method="GET" role="search">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="search" name="search" placeholder="What are you looking for?" aria-label="What are you looking for?">
+                    <button type="submit">Search <i class="fas fa-arrow-right"></i></button>
+                </form>
+                <div class="qt-hero-perks">
+                    <span><i class="fas fa-shield-alt"></i> Shop thoughtfully</span>
+                    <span><i class="fas fa-users"></i> Local community</span>
+                    <span><i class="fas fa-bolt"></i> Easy to use</span>
                 </div>
             </div>
+            <div class="qt-hero-art" aria-hidden="true">
+                <div class="qt-hero-glow"></div>
+                <div class="qt-promo-card">
+                    <span class="qt-promo-icon"><i class="fas fa-box-open"></i></span>
+                    <strong>Got something<br>to sell?</strong>
+                    <p>Turn pre-loved items into someone else's great find.</p>
+                    <span class="qt-promo-label">Your next deal starts here <i class="fas fa-arrow-right"></i></span>
+                </div>
+                <div class="qt-phone">
+                    <div class="qt-phone-speaker"></div>
+                    <div class="qt-phone-screen">
+                        <div class="qt-phone-brand"><i class="fas fa-bolt"></i> QuickTrade</div>
+                        <div class="qt-phone-picture"><i class="fas fa-mobile-alt"></i></div>
+                        <span class="qt-phone-label">A great find nearby</span>
+                        <strong>Discover something good</strong>
+                        <div class="qt-phone-lines"><i></i><i></i></div>
+                        <div class="qt-phone-button">Explore listings</div>
+                    </div>
+                </div>
+                <div class="qt-float-note qt-float-note-one"><span><i class="fas fa-tags"></i></span><div><strong>Great finds</strong><small>Worth a closer look</small></div></div>
+                <div class="qt-float-note qt-float-note-two"><span><i class="fas fa-handshake"></i></span><div><strong>Meet locally</strong><small>Connect with your area</small></div></div>
+            </div>
         </div>
+        <div class="qt-hero-bottom-line"><span></span><span></span><span></span></div>
     </section>
 
-    <!-- Categories Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center mb-5">Shop by Category</h2>
-            <div class="row g-4">
+    <section class="qt-section qt-categories-section" id="categories">
+        <div class="qt-container">
+            <div class="qt-section-heading">
+                <div><span class="qt-section-kicker">EXPLORE</span><h2>Browse by Category</h2><p>Start with a category and discover what's available.</p></div>
+                <a class="qt-text-link" href="{% url 'product_list' %}">View all listings <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="qt-category-grid">
                 {% for categ in categories %}
-                  
-                <div class="col-6 col-md-4 col-lg-2">
-                    <a href="{% url 'product_list' %}?category={{ categ.id }}" class="text-decoration-none">
-                        <div class="card category-card h-100 text-center">
-                            <div class="card-body">
-                                <i class="fas {{ categ.image }} fa-3x text-primary mb-3"></i>
-                                <h5 class="card-title">{{ categ.categories_name }}</h5>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                <a class="qt-category-card" href="{% url 'product_list' %}?category={{ categ.id }}">
+                    <span class="qt-category-icon"><i class="fas {{ categ.image|default:'fa-tag' }}"></i></span>
+                    <span class="qt-category-name">{{ categ.categories_name }}</span>
+                    <span class="qt-category-arrow"><i class="fas fa-arrow-up-right-from-square"></i></span>
+                </a>
+                {% empty %}
+                <div class="qt-empty-state">Categories will appear here when they are available.</div>
                 {% endfor %}
             </div>
         </div>
     </section>
 
-    <!-- Featured Products Section -->
-    <section class="py-5">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Latest Listings</h2>
-                <a href="{% url 'product_list' %}" class="btn btn-outline-primary">View All</a>
+    <section class="qt-section qt-listings-section" id="listings">
+        <div class="qt-container">
+            <div class="qt-section-heading qt-light-heading">
+                <div><span class="qt-section-kicker">FRESH FINDS</span><h2>Latest Listings</h2><p>Recently posted items from the QuickTrade community.</p></div>
+                <a class="qt-text-link" href="{% url 'product_list' %}">Browse all <i class="fas fa-arrow-right"></i></a>
             </div>
-            
-            <div class="row g-4">
-                <!--  Product  -->
-                  {% for prod in product %}
-                     
-                  <div class="col-md-6 col-lg-4 col-xl-3">
-                      <div class="card product-card h-100">
-                          <img src="{{ prod.image.url }}" class="card-img-top object-fit-md-contain " alt="{{ prod.name }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ prod.name }}</h5>
-                            <p class="price mb-1">₹{{ prod.price }}</p>
-                            <p class="location mb-2 d-flex align-items-center">
-                                <i class="fas fa-map-marker-alt me-1"></i> {{ prod.location }}
-                            </p>
-                            <p class="text-muted large mb-0">
-                                <span class="badge  bg-success">{{ prod.condition }}</span>
-                                <span class="float-end date">
-                                    <i class="far fa-clock me-1"></i> {{ prod.created_at|date:"M d" }}
-                                </span>
-                            </p>
+            {% if product %}
+            <div class="qt-listings-track-wrap">
+                <button class="qt-rail-arrow qt-rail-prev" type="button" aria-label="Scroll listings left" data-scroll-direction="-1"><i class="fas fa-chevron-left"></i></button>
+                <div class="qt-listings-rail" data-listings-rail>
+                    {% for prod in product %}
+                    <article class="qt-product-card">
+                        <a class="qt-product-image" href="{% url 'product_detail' prod.id %}" aria-label="View {{ prod.name }}">
+                            {% if prod.image %}
+                            <img src="{{ prod.image.url }}" alt="{{ prod.name }}" loading="lazy">
+                            {% else %}
+                            <span class="qt-product-placeholder"><i class="fas fa-image"></i></span>
+                            {% endif %}
+                            <span class="qt-product-location"><i class="fas fa-map-marker-alt"></i> {{ prod.location|default:"Local listing" }}</span>
+                        </a>
+                        <div class="qt-product-body">
+                            <div class="qt-product-condition">{{ prod.condition|default:"Pre-owned" }}</div>
+                            <h3><a href="{% url 'product_detail' prod.id %}">{{ prod.name }}</a></h3>
+                            <div class="qt-product-price">₹{{ prod.price }}</div>
+                            <div class="qt-product-meta"><span><i class="far fa-clock"></i> {{ prod.created_at|date:"M d" }}</span><a href="{% url 'product_detail' prod.id %}">View details <i class="fas fa-arrow-right"></i></a></div>
                         </div>
-                        <div class="card-footer bg-white p-3 border-top-0">
-                            <a href="{% url 'product_detail' prod.id %}" class="btn btn-primary d-block">View Details</a>
-                        </div>
-                    </div>
+                    </article>
+                    {% endfor %}
                 </div>
-                
-                {% endfor %}
+                <button class="qt-rail-arrow qt-rail-next" type="button" aria-label="Scroll listings right" data-scroll-direction="1"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            {% else %}
+            <div class="qt-no-listings"><span><i class="fas fa-store"></i></span><h3>Your next great find is on its way</h3><p>There are no listings to show here yet. Check back soon or browse the marketplace.</p><a href="{% url 'product_list' %}" class="qt-button">Browse marketplace <i class="fas fa-arrow-right"></i></a></div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="qt-section qt-how-section">
+        <div class="qt-container qt-how-layout">
+            <div class="qt-how-intro"><span class="qt-section-kicker">SIMPLE BY DESIGN</span><h2>Start trading in<br><span>4 easy steps.</span></h2><p>Whether you're finding a bargain or clearing some space, getting started is straightforward.</p><a class="qt-text-link" href="{% url 'product_list' %}">Get started <i class="fas fa-arrow-right"></i></a></div>
+            <div class="qt-steps-grid">
+                <article class="qt-step-card"><span class="qt-step-number">01</span><span class="qt-step-icon"><i class="fas fa-camera"></i></span><h3>List your item</h3><p>Add photos, a description and your asking price.</p></article>
+                <article class="qt-step-card"><span class="qt-step-number">02</span><span class="qt-step-icon"><i class="fas fa-search"></i></span><h3>Find a great deal</h3><p>Explore listings and find something that suits you.</p></article>
+                <article class="qt-step-card"><span class="qt-step-number">03</span><span class="qt-step-icon"><i class="fas fa-comments"></i></span><h3>Connect directly</h3><p>Use QuickTrade messaging to contact the other person.</p></article>
+                <article class="qt-step-card"><span class="qt-step-number">04</span><span class="qt-step-icon"><i class="fas fa-handshake"></i></span><h3>Complete the deal</h3><p>Agree on the details and meet safely to exchange.</p></article>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center mb-5">How It Works</h2>
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <div class="card border-0 bg-transparent h-100">
-                        <div class="card-body text-center">
-                            <div class="mb-4">
-                                <i class="fas fa-camera fa-4x text-primary"></i>
-                            </div>
-                            <h4>1. List Your Item</h4>
-                            <p class="text-muted">Take photos of your item, add a description, set your price, and list it in minutes.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card border-0 bg-transparent h-100">
-                        <div class="card-body text-center">
-                            <div class="mb-4">
-                                <i class="fas fa-handshake fa-4x text-primary"></i>
-                            </div>
-                            <h4>2. Ad Last for 30 Days</h4>
-                            <p class="text-muted"> Listing Expired after 30 Days of publishing Buyers contact you with in 30 Days.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card border-0 bg-transparent h-100">
-                        <div class="card-body text-center">
-                            <div class="mb-4">
-                                <i class="fas fa-comments fa-4x text-primary"></i>
-                            </div>
-                            <h4>3. Connect with Buyers</h4>
-                            <p class="text-muted">Interested buyers will contact you through our messaging system to arrange a meeting.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card border-0 bg-transparent h-100">
-                        <div class="card-body text-center">
-                            <div class="mb-4">
-                                <i class="fas fa-stopwatch fa-4x text-primary"></i>
-                            </div>
-                            <h4>4. Complete the Sale</h4>
-                            <p class="text-muted">Meet safely, exchange the item for payment, and mark the listing as sold.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section class="qt-bottom-panels">
+        <div class="qt-container qt-bottom-grid">
+            <div class="qt-trust-panel"><span class="qt-trust-icon"><i class="fas fa-shield-alt"></i></span><div><span class="qt-panel-kicker">TRADE SMART</span><h2>Good deals start with safe choices.</h2><p>Inspect an item before paying, meet in a public place and keep communication clear.</p><a href="{% url 'product_list' %}">Start browsing <i class="fas fa-arrow-right"></i></a></div></div>
+            <div class="qt-sell-panel"><span class="qt-panel-kicker">READY TO PASS IT ON?</span><h2>Make room for something new.</h2><p>List an item and help it find its next owner.</p>{% if user.is_authenticated %}<a class="qt-dark-button" href="{% url 'sell' %}"><i class="fas fa-plus"></i> Sell an item</a>{% else %}<a class="qt-dark-button" href="{% url 'login' %}"><i class="fas fa-plus"></i> Log in to sell</a>{% endif %}</div>
+            <div class="qt-community-panel"><span class="qt-community-icon"><i class="fas fa-map-marked-alt"></i></span><div><span class="qt-panel-kicker">CLOSER TO HOME</span><h2>Your local marketplace.</h2><p>Explore what's available and connect with people in your community.</p><a href="{% url 'product_list' %}">Explore listings <i class="fas fa-arrow-right"></i></a></div></div>
         </div>
     </section>
-
-    <!-- Shopping Safely Section -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1516274626895-055a99214f08" alt="Safe shopping" class="img-fluid rounded">
-                </div>
-                <div class="col-lg-6">
-                    <h2 class="mb-4">Shop Safely on Quick Trade</h2>
-                    <p class="lead mb-4">We prioritize your safety when buying and selling online.</p>
-                    
-                    <div class="d-flex mb-3">
-                        <div class="me-3">
-                            <i class="fas fa-check-circle text-success fa-2x"></i>
-                        </div>
-                        <div>
-                            <h5>Meet in Public Places</h5>
-                            <p class="text-muted">Always meet in well-lit, public locations when exchanging items.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="d-flex mb-3">
-                        <div class="me-3">
-                            <i class="fas fa-check-circle text-success fa-2x"></i>
-                        </div>
-                        <div>
-                            <h5>Verify Before You Buy</h5>
-                            <p class="text-muted">Inspect items thoroughly before completing your purchase.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="d-flex">
-                        <div class="me-3">
-                            <i class="fas fa-check-circle text-success fa-2x"></i>
-                        </div>
-                        <div>
-                            <h5>Communicate Through the App</h5>
-                            <p class="text-muted">Keep all conversations within our messaging system for your protection.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-   
-{% endblock content %} 
-   {% block script %}
-    
-   {% endblock script %}
+</main>
+{% endblock content %}
