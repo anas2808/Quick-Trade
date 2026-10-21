@@ -122,7 +122,7 @@
                         <div class="qd-fact"><i class="fas fa-map-marker-alt"></i><strong>{{ prod.location|default:"Location not provided" }}</strong><small>Pickup location</small></div>
                     </div>
                     {% if user.is_authenticated and user != prod.seller %}
-                        <a class="qd-btn qd-primary qd-full" href="{% url 'send_message_product' receiver_id=prod.seller.id product_id=prod.id %}"><i class="far fa-comment-dots"></i> Chat with Seller</a>
+                        <a class="qd-btn qd-primary qd-full" href="{% url 'send_message_product' receiver_id=prod.seller.email product_id=prod.id %}"><i class="far fa-comment-dots"></i> Chat with Seller</a>
                     {% elif user.is_authenticated and user == prod.seller %}
                         <span class="qd-btn qd-secondary qd-full" aria-disabled="true"><i class="fas fa-user-check"></i> This is your listing</span>
                     {% else %}
