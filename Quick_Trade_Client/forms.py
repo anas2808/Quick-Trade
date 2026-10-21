@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
+from django.utils.text import slugify
 from .models import *
 
 
@@ -11,6 +12,18 @@ class UserRegistrationForm(forms.ModelForm):
             "class": "form-control qt-register-control",
             "placeholder": "Enter your full name",
             "autocomplete": "name",
+        }),
+    )
+    phone = forms.CharField(
+        label="Phone number",
+        required=True,
+        max_length=15,
+        widget=forms.TextInput(attrs={
+            "class": "form-control qt-register-control",
+            "placeholder": "Enter your phone number",
+            "autocomplete": "tel",
+            "inputmode": "tel",
+            "maxlength": "15",
         }),
     )
     terms_accepted = forms.BooleanField(
