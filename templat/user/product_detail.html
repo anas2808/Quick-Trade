@@ -1,125 +1,260 @@
 {% extends 'user/base.html' %}
+{% load static %}
 
+{% block title %}{{ prod.name }} — QuickTrade{% endblock %}
 
 {% block style %}
-    
+<style>
+.qt-detail{--qd-navy:#0b1220;--qd-orange:#f7931e;--qd-orange-light:#ffb347;--qd-bg:#f4f6fa;--qd-text:#111827;--qd-muted:#6b7280;--qd-line:#e5e7eb;--qd-card:#fff;--qd-row:#f3f4f6;color:var(--qd-text);background:var(--qd-bg);min-height:70vh;padding-bottom:42px}
+.qt-detail *{box-sizing:border-box}
+.qt-detail a{color:inherit;text-decoration:none}
+.qt-detail .qd-wrap{width:min(1400px,100%);margin:0 auto;padding:0 24px}
+.qt-detail .qd-crumb{background:var(--qd-navy);color:#e5e7eb;padding:13px 0 78px;font-size:12px}
+.qt-detail .qd-crumb a{color:#e5e7eb}
+.qt-detail .qd-crumb span{margin:0 10px;opacity:.65}
+.qt-detail .qd-main{margin-top:-62px;position:relative}
+.qt-detail .qd-panel{background:var(--qd-card);border-radius:16px;padding:18px;box-shadow:0 8px 28px #00000012}
+.qt-detail .qd-top{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr) minmax(250px,.82fr);gap:22px;align-items:start}
+.qt-detail .qd-gallery{min-width:0}
+.qt-detail .qd-stage{position:relative;min-height:320px;height:clamp(250px,28vw,390px);border-radius:12px;overflow:hidden;background:var(--qd-row);display:grid;place-items:center}
+.qt-detail .qd-stage img{width:100%;height:100%;max-height:390px;object-fit:contain;display:block}
+.qt-detail .qd-stage .qd-no-image{font-size:64px;color:#9ca3af}
+.qt-detail .qd-featured{position:absolute;left:12px;top:12px;background:var(--qd-orange);color:#111;font-size:11px;font-weight:700;padding:5px 11px;border-radius:6px}
+.qt-detail .qd-image-count{position:absolute;right:12px;bottom:12px;background:#0b1220c9;color:#fff;border-radius:20px;padding:5px 10px;font-size:11px}
+.qt-detail .qd-title{font-size:clamp(24px,2.2vw,31px);line-height:1.2;font-weight:800;letter-spacing:-.45px;margin:2px 0 0}
+.qt-detail .qd-price{font-size:clamp(25px,2.3vw,32px);font-weight:800;color:var(--qd-orange);margin:12px 0 14px;overflow-wrap:anywhere}
+.qt-detail .qd-meta{display:flex;gap:10px 18px;flex-wrap:wrap;color:var(--qd-muted);font-size:12px;margin-bottom:15px}
+.qt-detail .qd-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.qt-detail .qd-pill{display:inline-flex;align-items:center;gap:6px;background:#e0f7e9;color:#15803d;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600}
+.qt-detail .qd-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 22px}
+.qt-detail .qd-fact{background:var(--qd-row);border-radius:9px;padding:12px 10px;min-width:0}
+.qt-detail .qd-fact i{color:var(--qd-orange);font-size:17px;margin-bottom:7px}
+.qt-detail .qd-fact strong{display:block;font-size:12px;overflow-wrap:anywhere}
+.qt-detail .qd-fact small{display:block;color:var(--qd-muted);font-size:10px;margin-top:2px}
+.qt-detail .qd-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:8px;padding:12px 15px;font-size:13px;font-weight:700;transition:transform .18s,filter .18s}
+.qt-detail .qd-btn:hover{filter:brightness(.97);transform:translateY(-1px)}
+.qt-detail .qd-primary{background:linear-gradient(180deg,var(--qd-orange-light),var(--qd-orange));color:#111}
+.qt-detail .qd-secondary{background:var(--qd-card);border:1px solid var(--qd-line);color:var(--qd-text)}
+.qt-detail .qd-full{width:100%}
+.qt-detail .qd-seller{border:1px solid var(--qd-line);border-radius:12px;padding:17px}
+.qt-detail .qd-seller-head{display:flex;gap:12px;align-items:center;margin-bottom:15px;min-width:0}
+.qt-detail .qd-avatar{width:58px;height:58px;flex:none;border-radius:50%;background:linear-gradient(135deg,#fde68a,#f59e0b);display:grid;place-items:center;color:#663c00;font-size:22px}
+.qt-detail .qd-seller h2{font-size:16px;font-weight:700;margin:0 0 4px;overflow-wrap:anywhere}
+.qt-detail .qd-seller p{font-size:11px;color:var(--qd-muted);margin:4px 0 0}
+.qt-detail .qd-verified{display:inline-flex;align-items:center;gap:4px;background:#e0f7e9;color:#15803d;border-radius:20px;padding:3px 8px;font-size:10px;font-weight:600}
+.qt-detail .qd-seller .qd-btn{margin-bottom:12px}
+.qt-detail .qd-seller-stats{border-top:1px solid var(--qd-line);padding-top:12px;margin-top:3px}
+.qt-detail .qd-stat{display:flex;gap:10px;align-items:center;padding:7px 0;font-size:11px;color:var(--qd-muted)}
+.qt-detail .qd-stat i{width:17px;color:var(--qd-orange);text-align:center}
+.qt-detail .qd-stat strong{margin-left:auto;color:var(--qd-text);font-weight:600;text-align:right}
+.qt-detail .qd-safety{background:var(--qd-row);border-radius:12px;padding:15px;margin-top:14px}
+.qt-detail .qd-safety h3{font-size:13px;font-weight:700;margin:0 0 10px}
+.qt-detail .qd-safety ul{list-style:none;margin:0;padding:0}
+.qt-detail .qd-safety li{display:flex;gap:8px;align-items:flex-start;color:var(--qd-muted);font-size:11px;margin:8px 0}
+.qt-detail .qd-safety li i{color:#16a34a;margin-top:3px}
+.qt-detail .qd-lower{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.82fr);gap:22px;margin-top:20px;align-items:start}
+.qt-detail .qd-box{background:var(--qd-card);border-radius:12px;padding:20px;box-shadow:0 2px 10px #0000000a;margin-bottom:14px;min-width:0}
+.qt-detail .qd-box h2{font-size:17px;font-weight:750;margin:0 0 12px}
+.qt-detail .qd-description{white-space:pre-line;color:var(--qd-muted);font-size:13px;line-height:1.85;overflow-wrap:anywhere}
+.qt-detail .qd-spec{width:100%;border-collapse:collapse;font-size:12px}
+.qt-detail .qd-spec td{padding:10px 12px;border-bottom:1px solid var(--qd-line);overflow-wrap:anywhere}
+.qt-detail .qd-spec tr:nth-child(odd){background:var(--qd-row)}
+.qt-detail .qd-spec td:first-child{color:var(--qd-muted);width:42%}
+.qt-detail .qd-similar{margin-top:22px}
+.qt-detail .qd-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.qt-detail .qd-section-head h2{font-size:19px;font-weight:750;margin:0}
+.qt-detail .qd-section-head a{font-size:12px;color:#c66b00;font-weight:700}
+.qt-detail .qd-similar-empty{background:var(--qd-card);border:1px solid var(--qd-line);border-radius:12px;padding:22px;color:var(--qd-muted);font-size:13px}
+.qt-detail .qd-note{border-left:3px solid var(--qd-orange);padding-left:13px;color:var(--qd-muted);font-size:12px;line-height:1.7}
+.qt-detail .qd-actions{display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px}
+.qt-detail .qd-actions .qd-btn{padding:8px 12px;font-size:11px}
+.qt-detail .qd-status{margin:0 0 14px;padding:10px 12px;border-radius:8px;background:#fff7ed;color:#9a3412;font-size:12px}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .qt-detail{--qd-bg:#0b1220;--qd-text:#f3f4f6;--qd-muted:#a7b0c0;--qd-line:#26324f;--qd-card:#16203a;--qd-row:#1c2846}}
+:root[data-theme="dark"] .qt-detail{--qd-bg:#0b1220;--qd-text:#f3f4f6;--qd-muted:#a7b0c0;--qd-line:#26324f;--qd-card:#16203a;--qd-row:#1c2846}
+@media(max-width:1100px){.qt-detail .qd-top{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}.qt-detail .qd-seller-column{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}.qt-detail .qd-safety{margin-top:0}.qt-detail .qd-lower{grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr)}}
+@media(max-width:760px){.qt-detail .qd-wrap{padding:0 12px}.qt-detail .qd-panel{padding:12px;border-radius:12px}.qt-detail .qd-top,.qt-detail .qd-lower{grid-template-columns:minmax(0,1fr);gap:14px}.qt-detail .qd-seller-column{grid-column:auto;display:block}.qt-detail .qd-safety{margin-top:14px}.qt-detail .qd-stage{height:250px;min-height:220px}.qt-detail .qd-title{font-size:25px}.qt-detail .qd-price{font-size:28px}.qt-detail .qd-box{padding:16px}.qt-detail .qd-crumb{padding-bottom:76px}.qt-detail .qd-section-head h2{font-size:17px}}
+@media(max-width:420px){.qt-detail .qd-facts{gap:6px}.qt-detail .qd-fact{padding:10px 7px}.qt-detail .qd-fact strong{font-size:11px}.qt-detail .qd-actions{justify-content:flex-start}.qt-detail .qd-stage{height:220px}}
+@media(prefers-reduced-motion:reduce){.qt-detail *{scroll-behavior:auto!important;transition:none!important}}
+</style>
 {% endblock style %}
-    
-{% include 'messages.html' %}
+
 {% block content %}
-    
-<main>
-    {% for prod in prod  %}
-    <div class="container py-5">
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'product_list' %}">Products</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'product_list' %}?category={{prod.main_category.id}}">{{ prod.main_category }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ prod.name }}</li>
-            </ol>
-        </nav>
-        
-        <!-- Product Detail -->
-        <div class="row">
-            <!-- Product Image -->
-            <div class="col-lg-6 mb-4 mb-lg-0">
-                <div class="product-image-container bg-white p-3 rounded shadow-sm">
-                    <img src="{{ prod.image.url }}" alt="{{ prod.name }}" class="product-image img-fluid object-fit-md-contain">
-                    
-                    <div class="d-flex justify-content-center mt-3">
-                        <a href="#" class="btn btn-outline-primary mx-1" data-bs-toggle="tooltip" title="Add to Favorites">
-                            <i class="far fa-heart"></i>
-                        </a>
-                        <!-- <a href="#" class="btn btn-outline-primary mx-1" data-bs-toggle="tooltip" title="Share">
-                            <i class="fas fa-share-alt"></i>
-                        </a>
-                        <a href="#" class="btn btn-outline-primary mx-1" data-bs-toggle="tooltip" title="Report">
-                            <i class="far fa-flag"></i> -->
-                        </a>
-                    </div>
-                </div>
-            </div>
-              
-            <!-- Product Info -->
-            <div class="col-lg-6">
-                <div class="card form-card h-100">
-                    <div class="card-body">
-                        <h1 class="h2 mb-2">{{ prod.name }}</h1>
-                        <p class="product-price mb-3">₹{{ prod.price }}</p>
-                        
-                        <div class="product-meta mb-4">
-                            <span class="badge rounded-pill bg-success mb-2 me-2">{{ prod.condition }}</span>
-                            <span class="d-block mb-2"><i class="fas fa-map-marker-alt me-2"></i>{{ prod.location }}</span>
-                            <span class="d-block mb-2"><i class="far fa-clock me-2"></i>Listed on {{ prod.created_at|date:"M d" }}</span>
-                            <span class="d-block"><i class="fas fa-user me-2"></i>Posted by {{ prod.seller.first_name }}</span>
-                        </div>
-                        
-                        <h5>Description</h5>
-                        <div class="product-description mb-4">
-                            {{ prod.description }}
-                        </div>
-                        
-                        <hr class="my-4">
-                        
-                        <div class="d-grid gap-2">
-                            {% if user.is_authenticated and user != prod.seller %}
-                            <a href="{% url 'send_message_product' receiver_id=prod.seller product_id=prod.id %}" class="btn btn-primary btn-lg">
-                                <i class="far fa-comment-dots me-2"></i>Contact Seller
-                            </a>
-                            {% elif user.is_authenticated and user == prod.seller %}
-                            <button class="btn btn-secondary btn-lg" disabled>
-                                <i class="far fa-comment-dots me-2"></i>Your Listing
-                            </button>
-                            {% else %}
-                            <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
-                                <i class="far fa-comment-dots me-2"></i>Login to Contact Seller
-                            </a>
-                            {% endif %}
-                            <a href="{% url 'user_listing' username=prod.seller.username %}" class="btn btn-outline-primary">
-                                <i class="fas fa-user me-2"></i>View Seller's Other Listings
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        
-        
-        <!-- Safety Tips -->
-        <div class="card bg-light mt-5">
-            <div class="card-body">
-                <h5 class="mb-3"><i class="fas fa-shield-alt me-2 text-primary"></i>Safety Tips for Buyers</h5>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="d-flex mb-2">
-                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
-                            <span>Meet in a public, well-lit place</span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="d-flex mb-2">
-                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
-                            <span>Inspect the item before paying</span>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="d-flex mb-2">
-                            <i class="fas fa-check-circle text-success me-2 mt-1"></i>
-                            <span>Never send money before receiving an item</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="qt-detail">
+    {% include 'messages.html' %}
+    {% for prod in prod %}
+    <div class="qd-crumb">
+        <div class="qd-wrap">
+            <a href="{% url 'index' %}">Home</a><span>›</span>
+            <a href="{% url 'product_list' %}">Browse</a><span>›</span>
+            {% if prod.main_category %}<a href="{% url 'product_list' %}?category={{ prod.main_category.id }}">{{ prod.main_category }}</a><span>›</span>{% endif %}
+            <span aria-current="page">{{ prod.name }}</span>
         </div>
     </div>
-</main>
 
+    <main class="qd-wrap qd-main">
+        <section class="qd-panel">
+            <div class="qd-top">
+                <div class="qd-gallery">
+                    <div class="qd-stage">
+                        {% if prod.image %}
+                            <img src="{{ prod.image.url }}" alt="{{ prod.name }}" fetchpriority="high">
+                        {% else %}
+                            <span class="qd-no-image" aria-label="No product image"><i class="far fa-image"></i></span>
+                        {% endif %}
+                        {% if prod.is_featured %}<span class="qd-featured">Featured</span>{% endif %}
+                    </div>
+                </div>
 
-   
-{% endblock content %} 
-   {% block script %}
-    
-   {% endblock script %}
+                <div class="qd-product-info">
+                    <h1 class="qd-title">{{ prod.name }}</h1>
+                    <div class="qd-price">₹{{ prod.price|floatformat:0 }}</div>
+                    <div class="qd-meta">
+                        {% if prod.location %}<span><i class="fas fa-map-marker-alt"></i> {{ prod.location }}</span>{% endif %}
+                        {% if prod.created_at %}<span><i class="far fa-calendar-alt"></i> Listed {{ prod.created_at|date:"d M Y" }}</span>{% endif %}
+                    </div>
+                    <div class="qd-pills">
+                        {% if prod.condition %}<span class="qd-pill"><i class="fas fa-check-circle"></i>{{ prod.condition }}</span>{% endif %}
+                        {% if prod.main_category %}<span class="qd-pill"><i class="fas fa-tag"></i>{{ prod.main_category }}</span>{% endif %}
+                    </div>
+                    <div class="qd-facts">
+                        <div class="qd-fact"><i class="fas fa-box-open"></i><strong>{{ prod.main_category|default:"Marketplace item" }}</strong><small>Category</small></div>
+                        <div class="qd-fact"><i class="far fa-clock"></i><strong>{% if prod.created_at %}{{ prod.created_at|date:"d M Y" }}{% else %}Available{% endif %}</strong><small>Date listed</small></div>
+                        <div class="qd-fact"><i class="fas fa-map-marker-alt"></i><strong>{{ prod.location|default:"Location not provided" }}</strong><small>Pickup location</small></div>
+                    </div>
+                    {% if user.is_authenticated and user != prod.seller %}
+                        <a class="qd-btn qd-primary qd-full" href="{% url 'send_message_product' receiver_id=prod.seller.id product_id=prod.id %}"><i class="far fa-comment-dots"></i> Chat with Seller</a>
+                    {% elif user.is_authenticated and user == prod.seller %}
+                        <span class="qd-btn qd-secondary qd-full" aria-disabled="true"><i class="fas fa-user-check"></i> This is your listing</span>
+                    {% else %}
+                        <a class="qd-btn qd-primary qd-full" href="{% url 'login' %}?next={{ request.path|urlencode }}"><i class="far fa-comment-dots"></i> Log in to contact seller</a>
+                    {% endif %}
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px">
+                        <button class="qd-btn qd-secondary" type="button" data-qd-share><i class="fas fa-share-alt"></i> Share</button>
+                        <a class="qd-btn qd-secondary" href="{% url 'user_listing' username=prod.seller.username %}"><i class="fas fa-store"></i> More listings</a>
+                    </div>
+                    <p class="qd-status" data-qd-status role="status" hidden></p>
+                </div>
+
+                <aside class="qd-seller-column">
+                    <div class="qd-seller">
+                        <div class="qd-seller-head">
+                            <div class="qd-avatar" aria-hidden="true"><i class="fas fa-user"></i></div>
+                            <div>
+                                <h2>{% firstof prod.seller.get_full_name prod.seller.username "Seller" %}</h2>
+                                <span class="qd-verified"><i class="fas fa-user-check"></i> QuickTrade seller</span>
+                                {% if prod.seller.registration_date %}<p>Member since {{ prod.seller.registration_date|date:"M Y" }}</p>{% endif %}
+                            </div>
+                        </div>
+                        <a class="qd-btn qd-primary qd-full" href="{% url 'user_listing' username=prod.seller.username %}">View Seller Profile</a>
+                        <div class="qd-seller-stats">
+                            <div class="qd-stat"><i class="fas fa-box"></i><span>Seller listings</span><strong><a href="{% url 'user_listing' username=prod.seller.username %}">View all</a></strong></div>
+                            <div class="qd-stat"><i class="fas fa-comments"></i><span>Contact</span><strong>QuickTrade chat</strong></div>
+                            <div class="qd-stat"><i class="fas fa-shield-alt"></i><span>Trading safely</span><strong>Read tips below</strong></div>
+                        </div>
+                    </div>
+                    <div class="qd-safety">
+                        <h3><i class="fas fa-shield-alt" style="color:var(--qd-orange);margin-right:6px"></i>Safety Tips for Buyers</h3>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i><span>Meet in a public, well-lit place.</span></li>
+                            <li><i class="fas fa-check-circle"></i><span>Inspect the item before paying.</span></li>
+                            <li><i class="fas fa-check-circle"></i><span>Never pay before seeing the item.</span></li>
+                            <li><i class="fas fa-check-circle"></i><span>Check relevant documents carefully.</span></li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="qd-lower">
+            <div>
+                <article class="qd-box">
+                    <h2><i class="far fa-file-alt" style="color:var(--qd-orange);margin-right:7px"></i>Description</h2>
+                    <div class="qd-description">{% if prod.description %}{{ prod.description }}{% else %}The seller has not added a description for this listing yet.{% endif %}</div>
+                </article>
+                <article class="qd-box">
+                    <h2><i class="fas fa-handshake" style="color:var(--qd-orange);margin-right:7px"></i>Buying safely</h2>
+                    <p class="qd-note">Contact the seller through QuickTrade, ask questions about the item, inspect it in person where possible, and agree on the details before making payment.</p>
+                </article>
+            </div>
+            <aside class="qd-box">
+                <h2><i class="fas fa-list-ul" style="color:var(--qd-orange);margin-right:7px"></i>Specifications</h2>
+                <table class="qd-spec">
+                    <tbody>
+                        <tr><td>Listing</td><td>{{ prod.name }}</td></tr>
+                        {% if prod.main_category %}<tr><td>Category</td><td>{{ prod.main_category }}</td></tr>{% endif %}
+                        {% if prod.condition %}<tr><td>Condition</td><td>{{ prod.condition }}</td></tr>{% endif %}
+                        {% if prod.location %}<tr><td>Location</td><td>{{ prod.location }}</td></tr>{% endif %}
+                        {% if prod.created_at %}<tr><td>Date listed</td><td>{{ prod.created_at|date:"d F Y" }}</td></tr>{% endif %}
+                        <tr><td>Price</td><td>₹{{ prod.price|floatformat:0 }}</td></tr>
+                    </tbody>
+                </table>
+            </aside>
+        </section>
+
+        {% if related_products %}
+        <section class="qd-similar">
+            <div class="qd-section-head"><h2>Similar Listings</h2><a href="{% url 'product_list' %}">Browse all <i class="fas fa-arrow-right"></i></a></div>
+            <div class="row g-3">
+                {% for related in related_products %}
+                    {% if related.id != prod.id %}
+                    <div class="col-6 col-md-4 col-xl-3">
+                        <article class="card h-100 border-0 shadow-sm overflow-hidden">
+                            <a href="{% url 'product_detail' related.id %}" class="d-flex align-items-center justify-content-center bg-light" style="height:150px">
+                                {% if related.image %}<img src="{{ related.image.url }}" alt="{{ related.name }}" loading="lazy" style="width:100%;height:150px;object-fit:contain">{% else %}<i class="far fa-image text-secondary fa-2x"></i>{% endif %}
+                            </a>
+                            <div class="card-body">
+                                <h3 class="h6"><a href="{% url 'product_detail' related.id %}">{{ related.name }}</a></h3>
+                                <div class="fw-bold" style="color:var(--qd-orange)">₹{{ related.price|floatformat:0 }}</div>
+                                <small class="text-muted">{{ related.location|default:"Local listing" }}</small>
+                            </div>
+                        </article>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% else %}
+        <section class="qd-similar">
+            <div class="qd-section-head"><h2>Discover More Listings</h2><a href="{% url 'product_list' %}">Browse all <i class="fas fa-arrow-right"></i></a></div>
+            <div class="qd-similar-empty">Explore more items from the QuickTrade community. <a href="{% url 'product_list' %}" style="color:#c66b00;font-weight:700">Browse marketplace <i class="fas fa-arrow-right"></i></a></div>
+        </section>
+        {% endif %}
+    </main>
+    {% empty %}
+    <main class="qd-wrap" style="padding-top:40px">
+        <section class="qd-box"><h1>Listing not found</h1><p>This listing may have been removed or is no longer available.</p><a class="qd-btn qd-primary" href="{% url 'product_list' %}">Browse listings</a></section>
+    </main>
+    {% endfor %}
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+(function () {
+    const shareButton = document.querySelector('[data-qd-share]');
+    const status = document.querySelector('[data-qd-status]');
+    if (shareButton && status) {
+        shareButton.addEventListener('click', async function () {
+            const showStatus = function (message) {
+                status.textContent = message;
+                status.hidden = false;
+            };
+            try {
+                if (navigator.share) {
+                    await navigator.share({ title: document.title, url: window.location.href });
+                } else if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(window.location.href);
+                    showStatus('Listing link copied.');
+                } else {
+                    showStatus('Copy this listing URL from your browser address bar.');
+                }
+            } catch (error) {
+                if (error && error.name !== 'AbortError') {
+                    showStatus('Share is unavailable here. Copy the listing URL from your browser address bar.');
+                }
+            }
+        });
+    }
+})();
+</script>
+{% endblock script %}
