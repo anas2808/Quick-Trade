@@ -101,7 +101,7 @@
                         {% else %}
                             <span class="qd-no-image" aria-label="No product image"><i class="far fa-image"></i></span>
                         {% endif %}
-                        {% if prod.is_featured %}<span class="qd-featured">Featured</span>{% endif %}
+                        
                     </div>
                 </div>
 
@@ -138,7 +138,7 @@
                 <aside class="qd-seller-column">
                     <div class="qd-seller">
                         <div class="qd-seller-head">
-                            <div class="qd-avatar" aria-hidden="true"><i class="fas fa-user"></i></div>
+                            {% if prod.seller.profile_picture %}<div class="qd-avatar" style="overflow:hidden;padding:0"><img src="{{ prod.seller.profile_picture.url }}" alt="{{ prod.seller.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>{% else %}<div class="qd-avatar" aria-hidden="true"><i class="fas fa-user"></i></div>{% endif %}
                             <div>
                                 <h2>{% firstof prod.seller.get_full_name prod.seller.username "Seller" %}</h2>
                                 <span class="qd-verified"><i class="fas fa-user-check"></i> QuickTrade seller</span>
@@ -147,7 +147,7 @@
                         </div>
                         <a class="qd-btn qd-primary qd-full" href="{% url 'user_listing' username=prod.seller.username %}">View Seller Profile</a>
                         <div class="qd-seller-stats">
-                            <div class="qd-stat"><i class="fas fa-box"></i><span>Seller listings</span><strong><a href="{% url 'user_listing' username=prod.seller.username %}">View all</a></strong></div>
+                            <div class="qd-stat"><i class="fas fa-box"></i><span>Seller listings</span><strong>{{ seller_listing_count|default:0 }}</strong></div>
                             <div class="qd-stat"><i class="fas fa-comments"></i><span>Contact</span><strong>QuickTrade chat</strong></div>
                             <div class="qd-stat"><i class="fas fa-shield-alt"></i><span>Trading safely</span><strong>Read tips below</strong></div>
                         </div>
