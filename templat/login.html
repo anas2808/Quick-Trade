@@ -1,62 +1,248 @@
 {% extends 'user/base.html' %}
+{% load static %}
 
+{% block title %}Login — QuickTrade{% endblock %}
 
 {% block style %}
-    
+<style>
+.qt-login-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 1fr);
+    min-height: min(820px, calc(100vh - 78px));
+    background: var(--qt-page);
+}
+.qt-login-welcome {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: clamp(42px, 5.5vw, 78px) clamp(26px, 5.5vw, 80px) 34px;
+    color: #fff;
+    background: radial-gradient(ellipse at 72% 25%, #4a2a14 0%, #1a1d2e 44%, #0b1220 82%);
+}
+.qt-login-welcome::before {
+    position: absolute; inset: auto -12% -24% 8%; height: 48%;
+    content: ""; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(247,147,30,.24), transparent 68%);
+    pointer-events: none;
+}
+.qt-login-welcome > * { position: relative; }
+.qt-login-eyebrow {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 17px;
+    color: var(--qt-orange-light); font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+}
+.qt-login-eyebrow::before { width: 23px; height: 3px; content: ""; background: var(--qt-orange); }
+.qt-login-welcome h1 {
+    max-width: 620px; margin: 0; color: #fff; font-size: clamp(38px, 4.1vw, 58px);
+    font-weight: 800; line-height: 1.08; letter-spacing: -1.6px;
+}
+.qt-login-welcome h1 span { display: block; color: var(--qt-orange); }
+.qt-login-lead { max-width: 510px; margin: 22px 0 30px; color: #dce1e9; font-size: 14px; line-height: 1.9; }
+.qt-login-features { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 22px 18px; max-width: 510px; }
+.qt-login-feature { display: flex; align-items: flex-start; gap: 12px; color: #cbd5e1; font-size: 11px; line-height: 1.65; }
+.qt-login-feature-icon {
+    display: grid; place-items: center; flex: 0 0 42px; width: 42px; height: 42px;
+    border-radius: 12px; background: var(--qt-orange); color: #111827; font-size: 16px;
+}
+.qt-login-feature strong { display: block; margin: 1px 0 3px; color: #fff; font-size: 12px; }
+.qt-login-art {
+    display: flex; align-items: center; justify-content: center; gap: clamp(6px,1.5vw,20px);
+    flex: 1; min-height: 170px; padding-top: 25px; font-size: clamp(36px,5.2vw,76px);
+}
+.qt-login-art span { filter: drop-shadow(0 10px 12px rgba(0,0,0,.28)); }
+.qt-login-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.14); }
+.qt-login-stat strong { display: block; color: #fff; font-size: 22px; line-height: 1.3; }
+.qt-login-stat span { color: #cbd5e1; font-size: 10px; }
+.qt-login-panel {
+    position: relative; display: grid; place-items: center; overflow: hidden;
+    padding: 48px clamp(18px,3.2vw,48px); background: var(--qt-page);
+}
+.qt-login-panel::before, .qt-login-panel::after {
+    position: absolute; z-index: 0; content: ""; border-radius: 50%; background: rgba(247,147,30,.09); pointer-events: none;
+}
+.qt-login-panel::before { width: 300px; height: 300px; top: -120px; right: -100px; }
+.qt-login-panel::after { width: 230px; height: 230px; bottom: -100px; left: -90px; }
+.qt-login-card {
+    position: relative; z-index: 1; width: 100%; max-width: 510px; padding: clamp(24px,3vw,38px);
+    border: 1px solid rgba(229,231,235,.85); border-radius: 18px; background: var(--qt-white);
+    box-shadow: 0 18px 50px rgba(11,18,32,.09);
+}
+.qt-login-card-head { text-align: center; margin-bottom: 25px; }
+.qt-login-card-mark {
+    display: grid; place-items: center; width: 54px; height: 54px; margin: 0 auto 15px;
+    border-radius: 16px; background: #fff0dc; color: #9a530a; font-size: 22px;
+}
+.qt-login-card h2 { margin: 0; color: var(--qt-navy); font-size: clamp(24px,2.5vw,31px); font-weight: 800; letter-spacing: -.8px; }
+.qt-login-card h2 span { color: var(--qt-orange); }
+.qt-login-subtitle { margin: 8px 0 0; color: var(--qt-muted); font-size: 12px; }
+.qt-login-field { margin-bottom: 17px; }
+.qt-login-field label { display: block; margin-bottom: 7px; color: #263247; font-size: 12px; font-weight: 700; }
+.qt-login-input-wrap {
+    display: flex; align-items: center; gap: 11px; min-height: 49px; padding: 0 13px;
+    border: 1px solid #dce1ea; border-radius: 9px; background: #fff; color: #8b95a5;
+    transition: border-color .18s ease, box-shadow .18s ease;
+}
+.qt-login-input-wrap:focus-within { border-color: var(--qt-orange); box-shadow: 0 0 0 4px rgba(247,147,30,.13); }
+.qt-login-input-wrap > i { width: 17px; text-align: center; color: #9aa3b2; }
+.qt-login-input-wrap input { flex: 1; width: 100%; min-width: 0; height: 46px; padding: 0; border: 0; outline: 0; background: transparent; color: #111827; font-size: 13px; box-shadow: none; }
+.qt-login-input-wrap input::placeholder { color: #9aa3b2; }
+.qt-login-eye { padding: 7px 2px; color: #687386; }
+.qt-login-error { margin-top: 6px; color: #b42318; font-size: 11px; }
+.qt-login-alert { margin-bottom: 18px; padding: 12px 14px; border: 1px solid #fecaca; border-radius: 9px; background: #fef2f2; color: #b91c1c; font-size: 12px; }
+.qt-login-options { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 0 22px; color: #5b6473; font-size: 11px; }
+.qt-login-options label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.qt-login-options input { width: 16px; height: 16px; accent-color: var(--qt-orange); }
+.qt-login-submit { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 51px; border: 0; border-radius: 9px; background: linear-gradient(135deg,var(--qt-orange-light),var(--qt-orange)); color: #171717; font-size: 14px; font-weight: 800; box-shadow: 0 8px 18px rgba(247,147,30,.2); transition: transform .18s ease, box-shadow .18s ease; }
+.qt-login-submit:hover { transform: translateY(-1px); box-shadow: 0 11px 24px rgba(247,147,30,.28); }
+.qt-login-signup { margin: 22px 0 0; text-align: center; color: #697386; font-size: 12px; }
+.qt-login-signup a { margin-left: 4px; color: #b9680b; font-weight: 800; }
+.qt-login-signup a:hover { text-decoration: underline; }
+.qt-login-security { display: flex; align-items: center; gap: 13px; max-width: 510px; margin: 18px auto 0; padding: 15px 17px; border: 1px solid #eceef3; border-radius: 12px; background: rgba(255,255,255,.75); }
+.qt-login-security-icon { display: grid; place-items: center; flex: 0 0 42px; width: 42px; height: 42px; border-radius: 10px; background: #fff0dc; color: #9a530a; font-size: 18px; }
+.qt-login-security strong { display: block; color: #253047; font-size: 11px; }
+.qt-login-security p { margin: 3px 0 0; color: var(--qt-muted); font-size: 10px; line-height: 1.6; }
+@media(max-width: 1000px) {
+    .qt-login-page { grid-template-columns: 1fr; }
+    .qt-login-welcome { padding: 42px clamp(22px,6vw,60px) 30px; }
+    .qt-login-welcome h1 { max-width: 700px; font-size: clamp(38px,6vw,54px); }
+    .qt-login-lead { max-width: 680px; }
+    .qt-login-features { grid-template-columns: repeat(4,minmax(0,1fr)); max-width: none; gap: 12px; }
+    .qt-login-feature { flex-direction: column; gap: 8px; }
+    .qt-login-art { min-height: 120px; }
+    .qt-login-stats { max-width: 620px; width: 100%; }
+    .qt-login-panel { padding: 38px 18px 48px; }
+}
+@media(max-width: 575px) {
+    .qt-login-welcome { padding: 35px 20px 26px; }
+    .qt-login-welcome h1 { font-size: 38px; }
+    .qt-login-lead { margin: 16px 0 22px; font-size: 12px; }
+    .qt-login-features { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px 12px; }
+    .qt-login-feature { flex-direction: row; gap: 9px; font-size: 10px; }
+    .qt-login-feature-icon { flex-basis: 36px; width: 36px; height: 36px; font-size: 14px; }
+    .qt-login-feature strong { font-size: 11px; }
+    .qt-login-art { min-height: 100px; font-size: 36px; }
+    .qt-login-stats { gap: 8px; }
+    .qt-login-stat strong { font-size: 19px; }
+    .qt-login-stat span { font-size: 9px; }
+    .qt-login-panel { padding: 28px 14px 38px; }
+    .qt-login-card { padding: 25px 18px; border-radius: 15px; }
+    .qt-login-options { align-items: flex-start; }
+}
+@media(prefers-reduced-motion: reduce) {
+    .qt-login-input-wrap, .qt-login-submit { transition: none; }
+}
+</style>
 {% endblock style %}
-    
 
 {% block content %}
-        <!-- Main Content -->
-    <main>
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="form-card auth-form">
-                        <h2 class="text-center mb-4">Login to Your Account</h2>
-                        
-                        <form id="loginForm" method="POST" action="{% url 'login' %}">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            
-                            <div class="mb-4 form-check">
-                                <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
-                                <label class="form-check-label" for="rememberMe">Remember me</label>
-                                <a href="#" class="float-end">Forgot password?</a>
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-sign-in-alt me-2"></i>Login
-                                </button>
-                            </div>
-                        </form>
-                        
-                        <div class="mt-4 text-center">
-                            <p>Don't have an account? <a href="{% url 'register' %}">Sign up now</a></p>
-                        </div>
-                        
-                       
-                    </div>
-                </div>
+<main class="qt-login-page">
+    <section class="qt-login-welcome" aria-label="Welcome to QuickTrade">
+        <div class="qt-login-eyebrow">WELCOME BACK TO QUICKTRADE</div>
+        <h1>Buy, Sell &amp; Trade <span>Locally.</span></h1>
+        <p class="qt-login-lead">Sign in to continue buying and selling with your local community. Manage your listings, connect with buyers, and discover great finds near you.</p>
+
+        <div class="qt-login-features">
+            <div class="qt-login-feature">
+                <span class="qt-login-feature-icon"><i class="fas fa-tags" aria-hidden="true"></i></span>
+                <div><strong>Post Listings</strong>Sell items you no longer need.</div>
+            </div>
+            <div class="qt-login-feature">
+                <span class="qt-login-feature-icon"><i class="fas fa-comments" aria-hidden="true"></i></span>
+                <div><strong>Chat with Buyers</strong>Contact sellers and buyers.</div>
+            </div>
+            <div class="qt-login-feature">
+                <span class="qt-login-feature-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></span>
+                <div><strong>Trade Carefully</strong>Follow safe local trading practices.</div>
+            </div>
+            <div class="qt-login-feature">
+                <span class="qt-login-feature-icon"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span>
+                <div><strong>Find Local Deals</strong>Discover items in your area.</div>
             </div>
         </div>
-    </main>
-    {% endblock content %} 
-    {% block script %}
-    <style>
-        .social-login-divider {
-            position: relative;
-            text-align: center;
-        }
-    
-        .social-login-divider-text {
-            display: inline-block;
-            padding: 0 10px;
-            background: white;
-            position: relative;
-            top: -12px;
-            color: #6c757d;
-        }
-        </style>
-    {% endblock script %}
+
+        <div class="qt-login-art" aria-hidden="true">
+            <span>🚗</span><span>📱</span><span>💻</span><span>🏍️</span><span>👟</span><span>⌚</span>
+        </div>
+
+        <div class="qt-login-stats" aria-label="QuickTrade highlights">
+            <div class="qt-login-stat"><strong><i class="fas fa-users" aria-hidden="true"></i></strong><span>Local community</span></div>
+            <div class="qt-login-stat"><strong><i class="fas fa-box-open" aria-hidden="true"></i></strong><span>Useful finds</span></div>
+            <div class="qt-login-stat"><strong><i class="fas fa-handshake" aria-hidden="true"></i></strong><span>Direct connections</span></div>
+        </div>
+    </section>
+
+    <section class="qt-login-panel" aria-label="Login form">
+        <div style="width:100%;max-width:510px">
+            <div class="qt-login-card">
+                <div class="qt-login-card-head">
+                    <div class="qt-login-card-mark"><i class="fas fa-bolt" aria-hidden="true"></i></div>
+                    <h2>Login to Quick<span>Trade</span></h2>
+                    <p class="qt-login-subtitle">Welcome back! Enter your details to continue.</p>
+                </div>
+
+                <form id="loginForm" method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="qt-login-alert" role="alert">
+                            {% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="qt-login-field">
+                        <label for="{{ form.username.id_for_label }}">Email address</label>
+                        <div class="qt-login-input-wrap">
+                            <i class="far fa-envelope" aria-hidden="true"></i>
+                            {{ form.username }}
+                        </div>
+                        {% for error in form.username.errors %}<div class="qt-login-error" role="alert">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    <div class="qt-login-field">
+                        <label for="{{ form.password.id_for_label }}">Password</label>
+                        <div class="qt-login-input-wrap">
+                            <i class="fas fa-lock" aria-hidden="true"></i>
+                            {{ form.password }}
+                            <button type="button" class="qt-login-eye" id="qtTogglePassword" aria-label="Show password" aria-pressed="false"><i class="far fa-eye" aria-hidden="true"></i></button>
+                        </div>
+                        {% for error in form.password.errors %}<div class="qt-login-error" role="alert">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    <div class="qt-login-options">
+                        <label for="qtRememberMe"><input type="checkbox" id="qtRememberMe" name="rememberMe"> Remember me</label>
+                        <span>Use your registered email</span>
+                    </div>
+
+                    <button type="submit" class="qt-login-submit"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login to your account</button>
+                </form>
+
+                <p class="qt-login-signup">Don't have an account? <a href="{% url 'register' %}">Sign up now</a></p>
+            </div>
+
+            <div class="qt-login-security">
+                <span class="qt-login-security-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></span>
+                <div><strong>Safe &amp; Secure Login</strong><p>Your password is handled by Django's authentication system. Never share it with anyone.</p></div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}
+
+{% block script %}
+<script>
+(function () {
+    const button = document.getElementById('qtTogglePassword');
+    const password = document.getElementById('{{ form.password.id_for_label }}');
+    if (!button || !password) return;
+    button.addEventListener('click', function () {
+        const show = password.type === 'password';
+        password.type = show ? 'text' : 'password';
+        button.setAttribute('aria-pressed', String(show));
+        button.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        button.innerHTML = show
+            ? '<i class="far fa-eye-slash" aria-hidden="true"></i>'
+            : '<i class="far fa-eye" aria-hidden="true"></i>';
+    });
+})();
+</script>
+{% endblock script %}
