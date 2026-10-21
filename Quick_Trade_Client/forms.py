@@ -4,6 +4,10 @@ from .models import *
 
 
 class UserRegistrationForm(forms.ModelForm):
+    profile_picture = forms.ImageField(
+        required=False,
+        widget=forms.ClearableFileInput(attrs={"class": "form-control qt-register-control", "accept": "image/*"}),
+    )
     terms_accepted = forms.BooleanField(
         label="I agree to the Terms of Service and Privacy Policy",
         required=True,
@@ -40,7 +44,6 @@ class UserRegistrationForm(forms.ModelForm):
             "first_name": forms.TextInput(attrs={"class": "form-control qt-register-control", "placeholder": "First name", "autocomplete": "given-name"}),
             "last_name": forms.TextInput(attrs={"class": "form-control qt-register-control", "placeholder": "Last name", "autocomplete": "family-name"}),
             "phone": forms.TextInput(attrs={"class": "form-control qt-register-control", "placeholder": "Phone number", "autocomplete": "tel", "inputmode": "tel", "maxlength": "15"}),
-            "profile_picture": forms.ClearableFileInput(attrs={"class": "form-control qt-register-control", "accept": "image/*"}),
             "bio": forms.Textarea(attrs={"class": "form-control qt-register-control", "rows": 3, "placeholder": "Tell other members a little about yourself"}),
         }
 
