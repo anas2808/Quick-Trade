@@ -4,19 +4,33 @@ from .models import *
 
 
 class UserRegistrationForm(forms.ModelForm):
+    full_name = forms.CharField(
+        label="Full name",
+        min_length=2,
+        widget=forms.TextInput(attrs={
+            "class": "form-control qt-register-control",
+            "placeholder": "Enter your full name",
+            "autocomplete": "name",
+        }),
+    )
+    terms_accepted = forms.BooleanField(
+        label="I agree to the Terms of Service and Privacy Policy",
+        required=True,
+        error_messages={"required": "You must accept the Terms of Service and Privacy Policy to create an account."},
+    )
     password = forms.CharField(
         label="Password",
         widget=forms.PasswordInput(attrs={
-            "class": "form-control",
-            "placeholder": "Create a strong password",
+            "class": "form-control qt-register-control",
+            "placeholder": "Create a password",
             "autocomplete": "new-password",
         }),
     )
     confirm_password = forms.CharField(
         label="Confirm password",
         widget=forms.PasswordInput(attrs={
-            "class": "form-control",
-            "placeholder": "Enter your password again",
+            "class": "form-control qt-register-control",
+            "placeholder": "Confirm your password",
             "autocomplete": "new-password",
         }),
     )
@@ -24,17 +38,12 @@ class UserRegistrationForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = [
-            "email", "username", "first_name", "last_name", "phone",
-            "profile_picture", "bio", "password", "confirm_password",
+            "full_name", "email", "phone", "password", "confirm_password",
+            "terms_accepted",
         ]
         widgets = {
-            "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "you@example.com", "autocomplete": "email"}),
-            "username": forms.TextInput(attrs={"class": "form-control", "placeholder": "Choose a username", "autocomplete": "username"}),
-            "first_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "First name", "autocomplete": "given-name"}),
-            "last_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Last name", "autocomplete": "family-name"}),
-            "phone": forms.TextInput(attrs={"class": "form-control", "placeholder": "Phone number", "autocomplete": "tel", "inputmode": "tel"}),
-            "profile_picture": forms.ClearableFileInput(attrs={"class": "form-control", "accept": "image/*"}),
-            "bio": forms.Textarea(attrs={"class": "form-control", "rows": 3, "placeholder": "Tell other members a little about yourself"}),
+            "email": forms.EmailInput(attrs={"class": "form-control qt-register-control", "placeholder": "Enter your email address", "autocomplete": "email"}),
+            "phone": forms.TextInput(attrs={"class": "form-control qt-register-control", "placeholder": "Enter your phone number", "autocomplete": "tel", "inputmode": "numeric", "maxlength": "15"}),
         }
 
     def clean(self):
@@ -44,6 +53,28 @@ class UserRegistrationForm(forms.ModelForm):
         if password and confirm_password and password != confirm_password:
             self.add_error("confirm_password", "Passwords do not match")
         return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        full_name = self.cleaned_data["full_name"].strip()
+        name_parts = full_name.split()
+        user.first_name = name_parts[0]
+        user.last_name = " ".join(name_parts[1:]) if len(name_parts) > 1 else ""
+
+        # The current CustomUser model requires a unique username, but the
+        # registration design does not ask the user to choose one.
+        base_username = slugify(self.cleaned_data["email"].split("@", 1)[0]) or "quicktrade-user"
+        username = base_username[:140]
+        suffix = 1
+        while CustomUser.objects.filter(username=username).exclude(pk=user.pk).exists():
+            username = f"{base_username[:140]}{suffix}"
+            suffix += 1
+        user.username = username
+
+        if commit:
+            user.save()
+            self.save_m2m()
+        return user
 
 
 class LoginForm(AuthenticationForm):
