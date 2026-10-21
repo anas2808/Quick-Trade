@@ -145,11 +145,26 @@ def Update_product(request,product_id):
     
     return render(request,'user/update_product.html', context)
 
-def product_detail(request,product_id):
-    product = Product.objects.filter(id=product_id)
-    context={
-        'prod': product,        
-        }
+def product_detail(request, product_id):
+    product = get_object_or_404(
+        Product.objects.select_related('seller', 'main_category'),
+        id=product_id,
+    )
+    related_products = Product.objects.filter(
+        ad_status='Active',
+        main_category=product.main_category,
+    ).exclude(id=product.id).select_related('seller', 'main_category').order_by('-created_at')[:8]
+    seller_listing_count = Product.objects.filter(
+        seller=product.seller,
+        ad_status='Active',
+    ).count()
+
+    context = {
+        'prod': [product],
+        'related_products': related_products,
+        'seller_listing_count': seller_listing_count,
+        'categories': main_categories.objects.all(),
+    }
     return render(request, 'user/product_detail.html', context)
 
 
