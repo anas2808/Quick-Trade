@@ -25,16 +25,18 @@
                 <div class="card">
                     <div class="card-body text-center">
                         <div class="avatar-container mb-3">
-                            <div class="avatar-placeholder rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px;">
-                                <td><img class="rounded-circle" src="/media/{{ user.profile_picture }}" width="100" height="100"></td>
-                            </div>
+                            {% if user.profile_picture %}
+                                <img class="rounded-circle mx-auto d-block" src="{{ user.profile_picture.url }}" alt="{{ user.username }} profile picture" width="100" height="100" style="object-fit:cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width:100px;height:100px;color:#0b1220;font-size:32px;font-weight:800;">{{ user.first_name|default:user.username|first|upper }}</div>
+                            {% endif %}
                         </div>
                         <h4>{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</h4>
                         <p class="text-muted">{{ user.email }}</p>
                          
                         <div class="d-grid gap-2 mt-3">
                             <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary">
-                                <i class="far fa-envelope me-2"></i>Edit Profile
+                                <i class="fas fa-user-edit me-2"></i>Edit Profile
                                 
                             </a>
                         </div>
