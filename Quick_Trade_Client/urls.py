@@ -19,6 +19,7 @@ urlpatterns = [
     path('Delete-Listing/<int:product_id>/', views.Delete_listing, name='delete_listing'),
     path('Update-Listing/<int:product_id>/', views.Update_product, name='update_product'),
     path('product_list/',views.product_list,name='product_list'),
+    path('categories/<int:category_id>/', views.product_list_by_category, name='category_list'),
     path('User_listing/<str:username>/',views.user_listing,name='user_listing'),
 
     
