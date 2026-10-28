@@ -25,15 +25,17 @@
                 <div class="card">
                     <div class="card-body text-center">
                         <div class="avatar-container mb-3">
-                            <div class="avatar-placeholder rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto" style="width: 100px; height: 100px;">
-                                <span class="text-white display-4">a</span>
-                            </div>
+                            {% if profile_user.profile_picture %}
+                                <img class="rounded-circle mx-auto d-block" src="{{ profile_user.profile_picture.url }}" alt="{{ profile_user.username }} profile picture" width="100" height="100" style="object-fit:cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width:100px;height:100px;color:#0b1220;font-size:32px;font-weight:800;">{{ profile_user.first_name|default:profile_user.username|first|upper }}</div>
+                            {% endif %}
                         </div>
                         <h4>{{ profile_user.first_name }} {{ profile_user.last_name }}</h4>
                         
                         {% if user.is_authenticated and user != profile_user %}
                         <div class="d-grid mt-3">
-                            <a href="" class="btn btn-primary">
+                            <a href="{% url 'send_message' receiver_id=profile_user.email %}" class="btn btn-primary">
                                 <i class="far fa-envelope me-2"></i>Contact
                             </a>
                         </div>
