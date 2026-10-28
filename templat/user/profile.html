@@ -98,7 +98,7 @@
                             <a href="{% url 'update_product' prod.id %}" class="btn btn-primary d-block">Update Listing</a>
                         </div>
                         <div class="card-footer bg-white p-3 border-top-0">
-                            <a href="{% url 'delete_listing' prod.id %}" class="btn btn-primary d-block">Delete Listing</a>
+                            <form method="post" action="{% url 'delete_listing' prod.id %}" onsubmit="return confirm('Delete this listing? This cannot be undone.');">{% csrf_token %}<button type="submit" class="btn btn-outline-danger d-block w-100">Delete Listing</button></form>
                         </div>
                     </div>
                 </div>
