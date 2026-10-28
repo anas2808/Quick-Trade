@@ -132,7 +132,7 @@ def sell(request):
 
 @login_required(login_url="/login") 
 def Update_product(request,product_id):
-    product = Product.objects.get(id=product_id)
+    product = get_object_or_404(Product, id=product_id, seller=request.user)
     if request.method == 'POST':
         form = ProductForm(request.POST,request.FILES, instance=product)
         if form.is_valid():
@@ -178,62 +178,64 @@ def product_detail(request, product_id):
 #     return render(request,'user/product_list_by_category.html')
 def product_list(request):
     categories = main_categories.objects.all()
-
     form = ProductSearchForm(request.GET)
-    
-    # Base query
-    products = Product.objects.filter(ad_status='Active').order_by('-created_at')
+    products = Product.objects.filter(ad_status='Active').select_related('seller', 'main_category')
     selected_conditions = request.GET.getlist('condition')
-    # Apply filters if form is valid
+    price_min = None
+    price_max = None
+    sort_by = 'newest'
+    search_query = ''
+    selected_category = None
+
     if form.is_valid():
-        # Filter by category
-        if form.cleaned_data.get('category'):
-            products = Product.objects.filter(ad_status='Active',main_category=form.cleaned_data['category'])
-        
-        # Filter by search term
-        if form.cleaned_data.get('search'):
-            search_query = form.cleaned_data['search']
-            products = products.filter(
-                Q(name__icontains=search_query) | 
-                Q(description__icontains=search_query)
-            )
-        
-      
+        category = form.cleaned_data.get('category')
+        search_query = form.cleaned_data.get('search') or ''
+        sort_by = form.cleaned_data.get('sort_by') or 'newest'
+        price_min = form.cleaned_data.get('price_min')
+        price_max = form.cleaned_data.get('price_max')
+
+        if category:
+            products = products.filter(main_category=category)
+            selected_category = category.id
+        if search_query:
+            products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
         if selected_conditions:
-            products = Product.objects.filter(ad_status='Active',condition__in=selected_conditions)
-        
-        sort_by = form.cleaned_data.get('sort_by')
+            products = products.filter(condition__in=selected_conditions)
+        if price_min is not None:
+            products = products.filter(price__gte=price_min)
+        if price_max is not None:
+            products = products.filter(price__lte=price_max)
         if sort_by == 'price_low':
-            products = products.order_by('price')
+            products = products.order_by('price', '-created_at')
         elif sort_by == 'price_high':
-            products = products.order_by('-price')
-            
-        price_min=form.cleaned_data['price_min']
-        price_max=form.cleaned_data['price_max']
-        # Price range filtering
-        if form.cleaned_data.get('price_min'):
-            products = Product.objects.filter(ad_status='Active',price__gte=price_min)
-        
-        if form.cleaned_data.get('price_max'):
-            products = Product.objects.filter(ad_status='Active',price__lte=price_max)
+            products = products.order_by('-price', '-created_at')
+        else:
+            products = products.order_by('-created_at')
+    else:
+        products = products.order_by('-created_at')
+
     context = {
         'products': products,
         'categories': categories,
         'form': form,
-        'price_mx':price_max,
-        'price_mn':price_min,
+        'price_mx': price_max,
+        'price_mn': price_min,
         'selected_conditions': selected_conditions,
-        'selected_category': form.cleaned_data.get('category').id if form.is_valid() and form.cleaned_data.get('category') else None,
-        'search_query': form.cleaned_data.get('search') if form.is_valid() else '',
-        'sort_by': form.cleaned_data.get('sort_by') if form.is_valid() and form.cleaned_data.get('sort_by') else 'newest'
+        'selected_category': selected_category,
+        'search_query': search_query,
+        'sort_by': sort_by,
     }
     return render(request, 'user/product_list.html', context)
 
-def Delete_listing(request,product_id):
-    product=Product.objects.get(id=product_id)
-    product.delete()
-    messages.warning(request,'Listing Removed succesfully')
-    return redirect('/profile/')
+@login_required(login_url='/login')
+def Delete_listing(request, product_id):
+    product = get_object_or_404(Product, id=product_id, seller=request.user)
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, 'Listing removed successfully.')
+    else:
+        messages.error(request, 'Please use the listing form to confirm deletion.')
+    return redirect('profile')
 
 def user_listing(request,username):
     user = get_object_or_404(CustomUser, username=username)
