@@ -441,3 +441,70 @@ form .btn-primary:hover {
     .form-card .btn-lg { font-size: 13px; }
     .filter-section { padding: 18px; }
 }
+
+
+/* QuickTrade polish pass: consistent responsive components across every marketplace page */
+:root {
+  --qt-navy: #0b1220;
+  --qt-orange: #f7931e;
+  --qt-orange-light: #fff3e4;
+  --qt-ink: #172033;
+  --qt-muted: #687386;
+  --qt-border: #e4e8ef;
+  --qt-surface: #ffffff;
+  --qt-page: #f6f8fb;
+}
+html { scroll-behavior: smooth; }
+body { color: var(--qt-ink); background: var(--qt-page); }
+a { transition: color .18s ease, background-color .18s ease, border-color .18s ease; }
+:focus-visible { outline: 3px solid rgba(247,147,30,.6); outline-offset: 3px; }
+main { min-height: 55vh; }
+.container { max-width: 1240px; }
+.breadcrumb { padding: 12px 16px; border-radius: 10px; background: #fff; font-size: 12px; }
+.breadcrumb a { color: #8a5a20; text-decoration: none; }
+.breadcrumb-item.active { color: #687386; }
+.card, .modal-content { border: 1px solid var(--qt-border); border-radius: 15px; box-shadow: 0 8px 28px rgba(11,18,32,.045); overflow: hidden; }
+.card-header { padding: 16px 20px; background: #fff; border-bottom-color: var(--qt-border); color: var(--qt-navy); }
+.card-body { padding: 22px; }
+.card-footer { border-top-color: var(--qt-border) !important; }
+.btn { font-weight: 700; border-radius: 9px; transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--qt-orange); border-color: var(--qt-orange); color: var(--qt-navy); }
+.btn-primary:hover, .btn-primary:focus { background: #e7820e; border-color: #e7820e; color: var(--qt-navy); box-shadow: 0 8px 18px rgba(247,147,30,.2); }
+.btn-outline-primary { color: var(--qt-navy); border-color: #cfd6e1; }
+.btn-outline-primary:hover { color: var(--qt-navy); border-color: var(--qt-orange); background: var(--qt-orange-light); }
+.form-control, .form-select { min-height: 44px; border-color: #dce2eb; border-radius: 9px; color: var(--qt-ink); }
+textarea.form-control { min-height: 110px; }
+.form-control:focus, .form-select:focus { border-color: var(--qt-orange); box-shadow: 0 0 0 4px rgba(247,147,30,.13); }
+.form-label, label { color: #3c4658; font-weight: 650; }
+.form-text, .text-muted { color: var(--qt-muted) !important; }
+.form-card { background: #fff; border: 1px solid var(--qt-border); border-radius: 17px; padding: clamp(20px, 4vw, 34px); box-shadow: 0 14px 40px rgba(11,18,32,.06); }
+.form-card h1, .form-card h2, .form-card h3, .form-card h4 { color: var(--qt-navy); font-weight: 800; }
+.form-card p { margin-bottom: 18px; }
+.form-card p > label { display: block; margin-bottom: 7px; }
+.form-card p > input, .form-card p > select, .form-card p > textarea { width: 100%; }
+.form-card .helptext, .helptext { display: block; margin-top: 5px; color: var(--qt-muted); font-size: 12px; }
+.errorlist { list-style: none; margin: 6px 0 0; padding: 0; color: #b42318; font-size: 12px; font-weight: 600; }
+.alert { border: 0; border-radius: 10px; box-shadow: 0 5px 18px rgba(11,18,32,.06); }
+.badge { font-weight: 700; letter-spacing: .01em; }
+.list-group-item { padding: 13px 17px; border-color: var(--qt-border); }
+.list-group-item.active { color: var(--qt-navy); background: var(--qt-orange-light); border-color: #f8d3a5; }
+.table { --bs-table-bg: transparent; }
+.table thead th { color: var(--qt-muted); background: #f7f8fb; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; border-bottom-color: var(--qt-border); }
+.table td { vertical-align: middle; border-color: var(--qt-border); }
+img { max-width: 100%; }
+img.rounded-circle { object-fit: cover; }
+.empty-state { padding: 48px 20px; border: 1px dashed #d5dce7; border-radius: 15px; background: #fff; text-align: center; }
+.empty-state i { color: #c3cad6; }
+.qt-header { position: relative; z-index: 20; }
+.qt-nav-link:focus-visible, .qt-logo:focus-visible, .qt-nav-icon:focus-visible { border-radius: 6px; outline-offset: 4px; }
+.qt-footer { margin-top: 40px; }
+@media (max-width: 767.98px) {
+  .container.py-5 { padding-top: 24px !important; padding-bottom: 28px !important; }
+  .card-body { padding: 17px; }
+  .table-responsive { border-radius: 10px; }
+  .btn-lg { padding: 11px 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
