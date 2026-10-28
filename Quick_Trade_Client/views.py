@@ -176,9 +176,9 @@ def product_detail(request, product_id):
 
 # def search_product_category(request):
 #     return render(request,'user/product_list_by_category.html')
-def product_list(request):
+def _listing_page(request, category_id=None):
     categories = main_categories.objects.all()
-    form = ProductSearchForm(request.GET)
+    form = ProductSearchForm(request.GET or None)
     products = Product.objects.filter(ad_status='Active').select_related('seller', 'main_category')
     selected_conditions = request.GET.getlist('condition')
     price_min = None
@@ -186,17 +186,24 @@ def product_list(request):
     sort_by = 'newest'
     search_query = ''
     selected_category = None
+    category_object = None
+
+    if category_id is not None:
+        category_object = get_object_or_404(main_categories, id=category_id)
+        products = products.filter(main_category=category_object)
+        selected_category = category_object.id
 
     if form.is_valid():
         category = form.cleaned_data.get('category')
-        search_query = form.cleaned_data.get('search') or ''
+        search_query = (form.cleaned_data.get('search') or '').strip()
         sort_by = form.cleaned_data.get('sort_by') or 'newest'
         price_min = form.cleaned_data.get('price_min')
         price_max = form.cleaned_data.get('price_max')
 
-        if category:
+        if category and category_id is None:
             products = products.filter(main_category=category)
             selected_category = category.id
+            category_object = category
         if search_query:
             products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
         if selected_conditions:
@@ -205,27 +212,49 @@ def product_list(request):
             products = products.filter(price__gte=price_min)
         if price_max is not None:
             products = products.filter(price__lte=price_max)
-        if sort_by == 'price_low':
-            products = products.order_by('price', '-created_at')
-        elif sort_by == 'price_high':
-            products = products.order_by('-price', '-created_at')
-        else:
-            products = products.order_by('-created_at')
+
+    if price_min is not None and price_max is not None and price_min > price_max:
+        form.add_error('price_max', 'Maximum price must be greater than or equal to minimum price.')
+        products = Product.objects.none()
+
+    if sort_by == 'price_low':
+        products = products.order_by('price', '-created_at')
+    elif sort_by == 'price_high':
+        products = products.order_by('-price', '-created_at')
     else:
         products = products.order_by('-created_at')
 
+    from django.core.paginator import Paginator
+    paginator = Paginator(products, 9)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     context = {
-        'products': products,
+        'products': page_obj.object_list,
+        'page_obj': page_obj,
+        'paginator': paginator,
         'categories': categories,
         'form': form,
         'price_mx': price_max,
         'price_mn': price_min,
         'selected_conditions': selected_conditions,
         'selected_category': selected_category,
+        'category_object': category_object,
         'search_query': search_query,
         'sort_by': sort_by,
+        'total_results': paginator.count,
     }
-    return render(request, 'user/product_list.html', context)
+    template = 'user/product_list_by_category.html' if category_id is not None else (
+        'user/product_list_by_category.html' if category_object else 'user/product_list.html'
+    )
+    return render(request, template, context)
+
+
+def product_list(request):
+    return _listing_page(request)
+
+
+def product_list_by_category(request, category_id):
+    return _listing_page(request, category_id=category_id)
 
 @login_required(login_url='/login')
 def Delete_listing(request, product_id):
